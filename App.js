@@ -7,6 +7,8 @@ var cors = require('cors');
 const servicesRouter = require('./src/Route/ServicesRoute');
 const globalRouter = require('./src/Route/GlobalRoute');
 const gigsRouter = require('./src/Route/GigsRouter');
+const connectionRouter = require('./src/Route/ConnectionRoute');
+const orderRouter = require('./src/Route/OrderRoute');
  
 const app = express()
 app.use(bodyParser.json());
@@ -19,6 +21,8 @@ app.use("",userRouter)
 app.use("",servicesRouter)
 app.use("",gigsRouter)
 app.use("",globalRouter)
+app.use("",connectionRouter)
+app.use("",orderRouter)
    
 
 app.get("/", (req, res)=>{

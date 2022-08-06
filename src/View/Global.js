@@ -2,7 +2,7 @@ const GigsModel = require("../Model/GigsModel");
 const ServiceModel = require("../Model/ServicesModel");
 const UserModel = require("../Model/UserModel");
 
-const getHomeView = async (req, res, next) => {
+const getHomeView = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   try {
     const ServiceData = await ServiceModel.find()
@@ -35,7 +35,7 @@ const getHomeView = async (req, res, next) => {
   }
 };
 
-const getSearchView = async (req, res, next) => {
+const getSearchView = async (req, res) => {
   try {
     const { keyward, type } = req.query;
     const getSearchData =

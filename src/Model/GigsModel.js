@@ -5,20 +5,39 @@ const GigsSchema = Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     title: {
       type: String,
-      required: [true, "User Id is Required"],
+      required: [true, "Title is Required"],
       minlength: 3,
       trim: true,
     },
+    about:{
+      type: String,
+      required: [true, "Title is Required"],
+    },
     description: {
       type: String,
+      required: [true, "Title is Required"],
     },
     pricing: {
       type: Object,
       require: true,
+      required: [true, "Title is Required"],
     },
     images: {
       type: Array,
       required: true,
+      required: [true, "Title is Required"],
+    },
+
+    serviceType: {
+      type: Array,
+      required: true,
+      required: [true, "Service type is Required"],
+    },
+
+    keyworlds: {
+      type: Array,
+      required: true,
+      required: [true, "keyworlds is Required"],
     },
 
     date: { type: Date, default: Date.now },
