@@ -58,3 +58,24 @@ module.exports = {
   getHomeView,
   getSearchView,
 };
+
+
+const getSearchServiceView = async (req, res) => {
+  try {
+    const { keyward, type } = req.query;
+    const getSearchData =  await ServiceModel.find({ name: { $regex: keyward } })
+         
+    res.status(200).send({
+      data:getSearchData
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error)
+  }
+};
+
+module.exports = {
+  getHomeView,
+  getSearchView,
+  getSearchServiceView
+};
