@@ -27,7 +27,7 @@ const GetBuyerOrderView = async (req, res) => {
     const count = await OrderModel.find({
       buyer: ObjectId(req.id),
     }).countDocuments();
-    await res.status(200).send({
+      res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
@@ -47,7 +47,7 @@ const GetSellerOrderView = async (req, res) => {
     const count = await OrderModel.find({
       buyer: ObjectId(req.id),
     }).countDocuments();
-    await res.status(200).send({
+      res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
@@ -61,7 +61,7 @@ const SingleBuyerOrderView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await OrderModel.find({ buyer: ObjectId(id) });
-    await res.status(200).send({
+      res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
     });
@@ -74,7 +74,7 @@ const SingleSellerOrderView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await OrderModel.find({ seller: ObjectId(id) });
-    await res.status(200).send({
+      res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
     });

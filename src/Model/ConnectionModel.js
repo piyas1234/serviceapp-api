@@ -2,16 +2,20 @@ const { Schema, default: mongoose } = require("mongoose");
 
 const ConnectionSchema = Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    connectionId: {
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    reciver: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
-    message:{
-      type:Array,
-      required:false
+    message: {
+      type: Array,
+      required: false,
     },
 
     date: { type: Date, default: Date.now },
@@ -22,9 +26,6 @@ const ConnectionSchema = Schema(
 const ConnectionModel = mongoose.model("Message", ConnectionSchema);
 
 module.exports = ConnectionModel;
-
-
-
 
 // [
 //     {
@@ -46,7 +47,5 @@ module.exports = ConnectionModel;
 //         id: 10,
 //         message: "nothing man"
 //     },
-
-
 
 // ]

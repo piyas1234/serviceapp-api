@@ -29,7 +29,7 @@ const GigsGetView = async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
     const count = await GigsModel.countDocuments();
-    await res.status(200).send({
+      res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
@@ -43,12 +43,12 @@ const SingleGigsView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await GigsModel.find({ _id: ObjectId(id) });
-    await res.status(200).send({
+      res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
     });
   } catch (err) {
-    await res.status(201).send(err);
+      res.status(201).send(err);
   }
 };
 
@@ -56,12 +56,12 @@ const GigsDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await GigsModel.deleteOne({ _id: ObjectId(id) });
-    await res.status(200).send({
+      res.status(200).send({
       message: "Gig Delete Successfully Done",
       product: gig,
     });
   } catch (err) {
-    await res.status(201).send(err);
+      res.status(201).send(err);
   }
 };
 
@@ -83,9 +83,9 @@ const GigsUpdateView = async (req, res) => {
         keyworlds,
       }
     );
-    await res.status(200).send(gig);
+      res.status(200).send(gig);
   } catch (err) {
-    await res.status(201).send(err);
+      res.status(201).send(err);
   }
 };
 

@@ -22,13 +22,16 @@ const ServicesGetView = async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
     const count = await ServiceModel.countDocuments();
-    await res.status(200).send({
+      res.status(200).send({
       services: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
   } catch (error) {
     console.log(error);
+    res.status(201).send({
+      message:"error"
+    })
   }
 };
 
@@ -36,12 +39,12 @@ const ServicesDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await ServiceModel.deleteOne({ _id: ObjectId(id) });
-    await res.status(200).send({
+      res.status(200).send({
       message: "Delete Service Successfully Done",
       product: product,
     });
   } catch (err) {
-    await res.status(201).send(err);
+      res.status(201).send(err);
   }
 };
 
