@@ -1,5 +1,5 @@
 const UserModel = require("../Model/UserModel");
-// const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
@@ -7,11 +7,11 @@ const client = require("twilio")(
   "ACbd9e34ee50cd672dc9a9dc57c2417306",
   "dda27a5568462ec90799dbb045ffb201",
   {
-    lazyLoading: true,
+    lazyLoading: true
   }
 );
 dotenv.config();
-// const saltRounds = 10;
+const saltRounds = 10;
 
 const postUserView = async (req, res, next) => {
   try {
@@ -32,7 +32,7 @@ const postUserView = async (req, res, next) => {
       { id: user._id, name: user.name, role: user.role },
       process.env.JWT_SECRET,
       {
-        expiresIn: "7 days", // expires in 24 hours
+        expiresIn: "30 days", // expires in 24 hours
       }
     );
 

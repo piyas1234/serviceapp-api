@@ -1,11 +1,25 @@
+const { default: mongoose } = require("mongoose");
 const GigsModel = require("../Model/GigsModel");
 
 const GigsPostView = async (req, res) => {
-  const { title, about, description, pricing, images, serviceType, keyworlds } =
-    req.body;
+
+
+  console.log(req,'req')
   try {
+    const {
+      title,
+      about,
+      description,
+      pricing,
+      images,
+      serviceType,
+      keyworlds,
+    } = req.body;
+
+
+    console.log(req.body, 'body data')
     const newGigs = await GigsModel({
-      user: req.id,
+      user:mongoose.Types.ObjectId(req.id),
       title,
       about,
       description,
@@ -17,7 +31,11 @@ const GigsPostView = async (req, res) => {
     await newGigs.save();
     res.status(200).send({ message: "Gigs added Successfully" });
   } catch (error) {
-    console.log(error);
+     console.log(error)
+    res.status(201).send({
+      message: "error",
+      error: error,
+    });
   }
 };
 
@@ -29,7 +47,7 @@ const GigsGetView = async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
     const count = await GigsModel.countDocuments();
-      res.status(200).send({
+    res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
@@ -42,13 +60,13 @@ const GigsGetView = async (req, res) => {
 const SingleGigsView = async (req, res) => {
   try {
     const id = req.params.id;
-    const gig = await GigsModel.find({ _id: ObjectId(id) });
-      res.status(200).send({
+    const gig = await GigsModel.find({ _id: mongoose.Types.ObjectId(id) });
+    res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
     });
   } catch (err) {
-      res.status(201).send(err);
+    res.status(201).send(err);
   }
 };
 
@@ -56,12 +74,12 @@ const GigsDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await GigsModel.deleteOne({ _id: ObjectId(id) });
-      res.status(200).send({
+    res.status(200).send({
       message: "Gig Delete Successfully Done",
       product: gig,
     });
   } catch (err) {
-      res.status(201).send(err);
+    res.status(201).send(err);
   }
 };
 
@@ -71,7 +89,7 @@ const GigsUpdateView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await GigsModel.updateOne(
-      { _id: ObjectId(id) },
+      { _id: mongoose.Types.ObjectId(id) },
       {
         user: req.id,
         title,
@@ -83,9 +101,9 @@ const GigsUpdateView = async (req, res) => {
         keyworlds,
       }
     );
-      res.status(200).send(gig);
+    res.status(200).send(gig);
   } catch (err) {
-      res.status(201).send(err);
+    res.status(201).send(err);
   }
 };
 

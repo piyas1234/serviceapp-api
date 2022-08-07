@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const ConnectionModel = require("../Model/ConnectionModel");
 
 const connectionPostView = async (req, res) => {
@@ -19,7 +20,7 @@ const connectionPostMessageView = async (req, res) => {
   const { id, message, reciverId } = req.body;
   try {
     await ConnectionModel.updateOne(
-      { _id: ObjectId(id) },
+      { _id: mongoose.Types.ObjectId(id) },
       { $push: { message: message, senderId: req.id, reciverId: reciverId } }
     );
     res.status(200).send({ message: "New Connction added Successfully" });
@@ -30,8 +31,8 @@ const connectionPostMessageView = async (req, res) => {
 
 const GetConnectionView = async (req, res) => {
   try {
-    const reciver = await ConnectionModel.find({ reciver: ObjectId(req.id) });
-    const sender = await ConnectionModel.find({ sender: ObjectId(req.id) });
+    const reciver = await ConnectionModel.find({ reciver: mongoose.Types.ObjectId(req.id) });
+    const sender = await ConnectionModel.find({ sender: mongoose.Types.ObjectId(req.id) });
     const newArray = reciver.concat(sender);
 
     res.status(200).send({
@@ -45,7 +46,7 @@ const GetConnectionView = async (req, res) => {
 const SingleConnectionView = async (req, res) => {
   try {
     const id = req.params.id;
-    const connection = await ConnectionModel.find({ _id: ObjectId(id) });
+    const connection = await ConnectionModel.find({ _id: mongoose.Types.ObjectId(id) });
     res.status(200).send({
       message: "Connection find Successfully Done",
       data: connection,
@@ -58,7 +59,7 @@ const SingleConnectionView = async (req, res) => {
 const SingleConnectionDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
-    const del = await ConnectionModel.deleteOne({ _id: ObjectId(id) });
+    const del = await ConnectionModel.deleteOne({ _id: mongoose.Types.ObjectId(id) });
     res.status(200).send({
       message: "Delete Successfully Done",
       data: del,

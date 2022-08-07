@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const OrderModel = require("../Model/OrderModel");
 
 const OrderPostView = async (req, res) => {
@@ -20,12 +21,12 @@ const OrderPostView = async (req, res) => {
 const GetBuyerOrderView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
-    const data = await OrderModel.find({ buyer: ObjectId(req.id) })
+    const data = await OrderModel.find({ buyer: mongoose.Types.ObjectId(req.id) })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
     const count = await OrderModel.find({
-      buyer: ObjectId(req.id),
+      buyer: mongoose.Types.ObjectId(req.id),
     }).countDocuments();
       res.status(200).send({
       gigs: data,
@@ -40,12 +41,12 @@ const GetBuyerOrderView = async (req, res) => {
 const GetSellerOrderView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
-    const data = await OrderModel.find({ seller: ObjectId(req.id) })
+    const data = await OrderModel.find({ seller: mongoose.Types.ObjectId(req.id) })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
     const count = await OrderModel.find({
-      buyer: ObjectId(req.id),
+      buyer: mongoose.Types.ObjectId(req.id),
     }).countDocuments();
       res.status(200).send({
       gigs: data,
@@ -60,7 +61,7 @@ const GetSellerOrderView = async (req, res) => {
 const SingleBuyerOrderView = async (req, res) => {
   try {
     const id = req.params.id;
-    const gig = await OrderModel.find({ buyer: ObjectId(id) });
+    const gig = await OrderModel.find({ buyer: mongoose.Types.ObjectId(id) });
       res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
@@ -73,7 +74,7 @@ const SingleBuyerOrderView = async (req, res) => {
 const SingleSellerOrderView = async (req, res) => {
   try {
     const id = req.params.id;
-    const gig = await OrderModel.find({ seller: ObjectId(id) });
+    const gig = await OrderModel.find({ seller: mongoose.Types.ObjectId(id) });
       res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
@@ -88,7 +89,7 @@ const SingleBuyerOrderUpdateView = async (req, res) => {
     const id = req.id;
     const status = req.params.status;
     const gig = await OrderModel.updateOne(
-      { buyer: ObjectId(id) },
+      { buyer: mongoose.Types.ObjectId(id) },
       {
         status: status,
       }
