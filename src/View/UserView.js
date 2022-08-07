@@ -1,5 +1,5 @@
 const UserModel = require("../Model/UserModel");
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
@@ -11,7 +11,7 @@ const client = require("twilio")(
   }
 );
 dotenv.config();
-const saltRounds = 10;
+// const saltRounds = 10;
 
 const postUserView = async (req, res, next) => {
   try {
