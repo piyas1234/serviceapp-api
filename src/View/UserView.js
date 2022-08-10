@@ -112,6 +112,21 @@ const getUserProfileView = async (req, res, next) => {
   }
 };
 
+const getPublicProfileView = async (req, res, next) => {
+  try {
+    const profile = await UserModel.find({
+      _id: mongoose.Types.ObjectId(req.params.id),
+    });
+    console.log(profile);
+    res.status(200).send({
+      data: profile[0],
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(201).json(error);
+  }
+};
+
 
 const getPopularUserProfileView = async (req, res, next) => {
   try {

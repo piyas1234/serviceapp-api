@@ -77,6 +77,27 @@ const GigsGetUserView = async (req, res) => {
   }
 };
 
+
+const GigsGetPublicView = async (req, res) => {
+  const { page = 1, limit = 50 } = req.query;
+  try {
+    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.params.id) })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+    const count = await GigsModel.find({
+      user: mongoose.Types.ObjectId(req.id),
+    }).countDocuments();
+    res.status(200).send({
+      gigs: data,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const GigsGetCategoryView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query;
   try {
@@ -161,4 +182,5 @@ module.exports = {
   SingleGigsView,
   GigsGetUserView,
   GigsGetCategoryView,
+  GigsGetPublicView
 };
