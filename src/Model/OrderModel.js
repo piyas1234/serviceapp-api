@@ -8,6 +8,11 @@ const OrderSchema = Schema(
       ref: "User",
       required: true,
     },
+    gig: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Gigs",
+      required: true,
+    },
     description: {
       type: String,
       required: [true, "Title is Required"],

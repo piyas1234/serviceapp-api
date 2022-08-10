@@ -1,27 +1,29 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, Mongoose } = require("mongoose");
 const OrderModel = require("../Model/OrderModel");
 
 const OrderPostView = async (req, res) => {
-  const { seller, buyer, description, pricing, status } = req.body;
+  const { seller, description, pricing , gig} = req.body;
   try {
     const order = await OrderModel({
-      seller,
-      buyer,
+      seller:mongoose.Types.ObjectId(seller),
+      buyer:mongoose.Types.ObjectId(req.id),
+      gig:mongoose.Types.ObjectId(gig),
       description,
       pricing,
-      status,
+       
+
     });
     order.save();
     res.status(200).send({ message: "Order send Successfully" });
   } catch (error) {
-    res.status(201).send(err);
+    res.status(201).send(error);
   }
 };
 
 const GetBuyerOrderView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
-    const data = await OrderModel.find({ buyer: mongoose.Types.ObjectId(req.id) })
+    const data = await OrderModel.find({ buyer: mongoose.Types.ObjectId(req.id) }).populate('gig').populate('seller',"profile")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();

@@ -9,7 +9,7 @@ const GigsSchema = Schema(
       minlength: 3,
       trim: true,
     },
-    about:{
+    about: {
       type: String,
       required: [true, "Title is Required"],
     },
@@ -27,6 +27,7 @@ const GigsSchema = Schema(
       required: true,
       required: [true, "Title is Required"],
     },
+    order: [{ type: Schema.Types.ObjectId, ref: "Order" }],
 
     serviceType: {
       type: Array,

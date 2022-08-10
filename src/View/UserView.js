@@ -2,12 +2,13 @@ const UserModel = require("../Model/UserModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { default: mongoose } = require("mongoose");
 
 const client = require("twilio")(
   "ACbd9e34ee50cd672dc9a9dc57c2417306",
   "dda27a5568462ec90799dbb045ffb201",
   {
-    lazyLoading: true
+    lazyLoading: true,
   }
 );
 dotenv.config();
@@ -49,6 +50,82 @@ const postUserView = async (req, res, next) => {
   }
 };
 
+const postUserProfileView = async (req, res, next) => {
+  
+  try {
+    const { name, bio, about, profilePic, coverPic } = req.body;
+    console.log(req.body);
+    const id = req.id;
+    const profile = await UserModel.updateOne(
+      { _id: mongoose.Types.ObjectId(id) },
+      {
+        name: name,
+        profile: {
+          bio,
+          about,
+          profilePic,
+          coverPic,
+        },
+      }
+    );
+    res.status(200).send(profile);
+  } catch (error) {
+    console.log(error);
+    return res.status(201).json(error);
+  }
+};
+
+const updateUserProfileView = async (req, res, next) => {
+  try {
+    const { notification, pushNotification, fingerprint, twofactorAuth } =
+      req.body;
+    
+    const id = req.id;
+    const profile = await UserModel.updateOne(
+      { _id: mongoose.Types.ObjectId(id) },
+      {
+        notification,
+        pushNotification,
+        fingerprint,
+        twofactorAuth,
+      }
+    );
+    res.status(200).send(profile);
+  } catch (error) {
+    console.log(error);
+    return res.status(201).json(error);
+  }
+};
+
+const getUserProfileView = async (req, res, next) => {
+  try {
+    const profile = await UserModel.find({
+      _id: mongoose.Types.ObjectId(req.id),
+    });
+    console.log(profile);
+    res.status(200).send({
+      data: profile[0],
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(201).json(error);
+  }
+};
+
+
+const getPopularUserProfileView = async (req, res, next) => {
+  try {
+    const profile = await UserModel.find({});
+ 
+    res.status(200).send({
+      data: profile
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(201).json(error);
+  }
+};
+
 const LoginUserView = async (req, res, next) => {
   try {
     const user = await UserModel.findOne({ phone: req.body.phone });
@@ -59,7 +136,7 @@ const LoginUserView = async (req, res, next) => {
         .send({ mesage: "Your have no account with this number" });
     }
 
-    console.log(user)
+    console.log(user);
     var passwordIsValid = req.body.password === user.password;
 
     if (!passwordIsValid) {
@@ -116,17 +193,28 @@ const sendPassword = async (req, res, next) => {
       to: `88${req.query.number}`, //this must be a verified phone number for twilio trial accounts
       body: "Your new password is" + securePassword,
     });
-    if(data.numSegments==='1'){
-      res.status(200).send({ message:"Your new Password Send to "+req.query.number+"." +"You can login now with this password" });
-    }
-    else{
+    if (data.numSegments === "1") {
+      res.status(200).send({
+        message:
+          "Your new Password Send to " +
+          req.query.number +
+          "." +
+          "You can login now with this password",
+      });
+    } else {
       return res.status(201).send({ mesage: "Something is wrong" });
     }
-
-     
   } catch (error) {
-    res.send(error)
+    res.send(error);
   }
 };
 
-module.exports = { postUserView, LoginUserView, sendPassword };
+module.exports = {
+  postUserView,
+  LoginUserView,
+  sendPassword,
+  postUserProfileView,
+  getUserProfileView,
+  updateUserProfileView,
+  getPopularUserProfileView
+};

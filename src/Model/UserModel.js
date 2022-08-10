@@ -1,20 +1,16 @@
 const { Schema, default: mongoose } = require("mongoose");
 const validator = require("validator");
-var uniqueValidator = require('mongoose-unique-validator');
-
+var uniqueValidator = require("mongoose-unique-validator");
 
 const UserSchema = Schema(
   {
     name: {
       type: String,
       required: [true, "Name is Required!"],
-      minlength:3,
+      minlength: 3,
       trim: true,
     },
 
-
-     
- 
     phone: {
       type: String,
       unique: [true, "Phone is Already Registered!"],
@@ -33,24 +29,26 @@ const UserSchema = Schema(
       minlength: [4, "Password should be greater than or equal 4 character!"],
     },
 
-    
     role: {
       type: String,
       default: "user",
       enum: ["admin", "merchant", "user"],
     },
-    profilePic: {
-      type: String,
+    notification: { type: Boolean },
+    pushNotification: { type: Boolean },
+    fingerprint: { type: Boolean },
+    twofactorAuth: { type: Boolean },
+    profile: {
+      type: Object,
     },
+    gigs: [{ type: Schema.Types.ObjectId, ref: "Gigs" }],
+
     date: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
 
-
 UserSchema.plugin(uniqueValidator);
-
-
 
 const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;

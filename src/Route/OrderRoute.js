@@ -10,11 +10,11 @@ const {
 } = require("../View/OrderView");
 
 const orderRouter = express();
-orderRouter.post("/gigs", auth, OrderPostView);
-orderRouter.get("/gigs", auth, GetBuyerOrderView);
-orderRouter.get("/gigs:id", auth, GetSellerOrderView);
-orderRouter.put("/gigs:id", auth, SingleBuyerOrderView);
-orderRouter.delete("/gigs:id", auth, SingleSellerOrderView);
-orderRouter.delete("/gigs:id", auth, SingleBuyerOrderUpdateView);
+orderRouter.post("/order", auth, OrderPostView);
+orderRouter.get("/order", auth, GetBuyerOrderView);
+orderRouter.get("/order/:id", auth, GetSellerOrderView);
+orderRouter.put("/order/:id", auth, SingleBuyerOrderView);
+orderRouter.delete("/order/:id", auth, SingleSellerOrderView);
+orderRouter.delete("/order/:id", auth, SingleBuyerOrderUpdateView);
 
 module.exports = orderRouter;
