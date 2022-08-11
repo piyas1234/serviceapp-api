@@ -9,6 +9,7 @@ const globalRouter = require('./src/Route/GlobalRoute');
 const gigsRouter = require('./src/Route/GigsRouter');
 const connectionRouter = require('./src/Route/ConnectionRoute');
 const orderRouter = require('./src/Route/OrderRoute');
+const reviewRouter = require('./src/Route/ReviewRoute');
  
 const app = express()
 app.use(bodyParser.json());
@@ -23,6 +24,7 @@ app.use("",gigsRouter)
 app.use("",globalRouter)
 app.use("",connectionRouter)
 app.use("",orderRouter)
+app.use("",reviewRouter)
    
 
 app.get("/", (req, res)=>{

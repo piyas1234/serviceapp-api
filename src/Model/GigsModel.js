@@ -40,6 +40,7 @@ const GigsSchema = Schema(
       required: true,
       required: [true, "keyworlds is Required"],
     },
+    reviewGig: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 
     date: { type: Date, default: Date.now },
   },
