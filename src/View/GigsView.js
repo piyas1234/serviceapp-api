@@ -127,7 +127,7 @@ const GigsGetCategoryView = async (req, res) => {
 const SingleGigsView = async (req, res) => {
   try {
     const id = req.params.id;
-    const gig = await GigsModel.find({ _id: mongoose.Types.ObjectId(id) }).populate('user') 
+    const gig = await GigsModel.find({ _id: mongoose.Types.ObjectId(id) }).populate('user').populate('reviewGig')
     res.status(200).send({
       message: "Gig find Successfully Done",
       data: gig[0],
