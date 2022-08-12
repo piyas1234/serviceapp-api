@@ -1,21 +1,21 @@
 const express = require('express')
-const mongoose = require('mongoose');
-const dotenv = require("dotenv");
+const mongoose = require('mongoose')
+const dotenv = require("dotenv")
 const bodyParser = require("body-parser")
-const userRouter = require('./src/Route/UserRoute');
-var cors = require('cors');
-const servicesRouter = require('./src/Route/ServicesRoute');
-const globalRouter = require('./src/Route/GlobalRoute');
-const gigsRouter = require('./src/Route/GigsRouter');
-const connectionRouter = require('./src/Route/ConnectionRoute');
-const orderRouter = require('./src/Route/OrderRoute');
-const reviewRouter = require('./src/Route/ReviewRoute');
+const userRouter = require('./src/Route/UserRoute')
+var cors = require('cors')
+const servicesRouter = require('./src/Route/ServicesRoute')
+const globalRouter = require('./src/Route/GlobalRoute')
+const gigsRouter = require('./src/Route/GigsRouter')
+const connectionRouter = require('./src/Route/ConnectionRoute')
+const orderRouter = require('./src/Route/OrderRoute')
+const reviewRouter = require('./src/Route/ReviewRoute')
  
 const app = express()
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
-dotenv.config();
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors())
+dotenv.config()
 
 
 app.use("",userRouter)
@@ -39,15 +39,15 @@ mongoose.connect(
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }
-  );
+  )
   mongoose.connection.once("open", () => {
-    const port = process.env.PORT || 1000;
+    const port = process.env.PORT || 1000
     app.listen(port, () => {
-      console.log(`App listening on port ${port}`);
-    });
-  });
+      console.log(`App listening on port ${port}`)
+    })
+  })
   mongoose.connection.on("error", (err) => {
-    console.log(err);
-  });
+    console.log(err)
+  })
 
  

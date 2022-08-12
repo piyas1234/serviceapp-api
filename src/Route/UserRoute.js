@@ -1,9 +1,9 @@
-const express = require("express");
-const { postUserView, LoginUserView, sendPassword, postUserProfileView, getUserProfileView, updateUserProfileView, getPopularUserProfileView } = require("../View/UserView");
-const auth = require("../middlewares/auth");
+const express = require("express")
+const { postUserView, LoginUserView, sendPassword, postUserProfileView, getUserProfileView, updateUserProfileView, getPopularUserProfileView } = require("../View/UserView")
+const auth = require("../middlewares/auth")
 
 
-const userRouter = express();
+const userRouter = express()
 userRouter.post("/profile", auth, postUserProfileView)
 userRouter.get("/profile",auth, getUserProfileView)
 userRouter.put("/profile",auth, updateUserProfileView)
@@ -12,4 +12,4 @@ userRouter.post("/signup", postUserView)
 userRouter.post("/login", LoginUserView)
 userRouter.get("/sendpassword", sendPassword)
 
-module.exports =  userRouter;
+module.exports =  userRouter

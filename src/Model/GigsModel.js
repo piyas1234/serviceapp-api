@@ -1,4 +1,4 @@
-const { Schema, default: mongoose } = require("mongoose");
+const { Schema, default: mongoose } = require("mongoose")
 
 const GigsSchema = Schema(
   {
@@ -41,12 +41,13 @@ const GigsSchema = Schema(
       required: [true, "keyworlds is Required"],
     },
     reviewGig: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+   
 
     date: { type: Date, default: Date.now },
   },
   { timestamps: true }
-);
+)
 
-const GigsModel = mongoose.model("Gigs", GigsSchema);
+const GigsModel = mongoose.model("Gigs", GigsSchema)
 
-module.exports = GigsModel;
+module.exports = GigsModel

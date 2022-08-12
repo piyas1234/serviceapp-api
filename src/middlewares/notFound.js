@@ -1,3 +1,3 @@
-import Boom from '@hapi/boom';
+import Boom from '@hapi/boom'
 
-export default (req, res, next) => next(Boom.notFound('missing'));
+export default (req, res, next) => next(Boom.notFound('missing'))

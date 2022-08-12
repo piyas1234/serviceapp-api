@@ -1,8 +1,8 @@
-const { default: mongoose } = require("mongoose");
-const GigsModel = require("../Model/GigsModel");
+const { default: mongoose } = require("mongoose")
+const GigsModel = require("../Model/GigsModel")
 
 const GigsPostView = async (req, res) => {
-  console.log(req, "req");
+  console.log(req, "req")
   try {
     const {
       title,
@@ -12,9 +12,9 @@ const GigsPostView = async (req, res) => {
       images,
       serviceType,
       keyworlds,
-    } = req.body;
+    } = req.body
 
-    console.log(req.body, "body data");
+    console.log(req.body, "body data")
     const newGigs = await GigsModel({
       user: mongoose.Types.ObjectId(req.id),
       title,
@@ -24,137 +24,137 @@ const GigsPostView = async (req, res) => {
       images,
       serviceType,
       keyworlds,
-    });
-    await newGigs.save();
-    res.status(200).send({ message: "Gigs added Successfully" });
+    })
+    await newGigs.save()
+    res.status(200).send({ message: "Gigs added Successfully" })
   } catch (error) {
-    console.log(error);
+    
     res.status(201).send({
       message: "error",
       error: error,
-    });
+    })
   }
-};
+}
 
 const GigsGetView = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20 } = req.query
   try {
     const data = await GigsModel.find({})
       .populate("user")
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .exec();
+      .exec()
 
-    console.log(data);
-    const count = await GigsModel.countDocuments();
+   
+    const count = await GigsModel.countDocuments()
     res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
-    });
+    })
   } catch (error) {
-    console.log(error);
+    
   }
-};
+}
 
 const GigsGetUserView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 50 } = req.query
   try {
     const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.id) })
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .exec();
+      .exec()
     const count = await GigsModel.find({
       user: mongoose.Types.ObjectId(req.id),
-    }).countDocuments();
+    }).countDocuments()
     res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
-    });
+    })
   } catch (error) {
-    console.log(error);
+    
   }
-};
+}
 
 
 const GigsGetPublicView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 50 } = req.query
   try {
     const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.params.id) })
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .exec();
+      .exec()
     const count = await GigsModel.find({
       user: mongoose.Types.ObjectId(req.id),
-    }).countDocuments();
+    }).countDocuments()
     res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
-    });
+    })
   } catch (error) {
-    console.log(error);
+    
   }
-};
+}
 
 const GigsGetCategoryView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 50 } = req.query
   try {
-    const name = req.params.name;
-    console.log(name);
+    const name = req.params.name
+    
     const data = await GigsModel.find({ serviceType: { $all: [name] } })
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .exec();
+      .exec()
 
     const count = await GigsModel.find({
       serviceType: { $all: [name] },
-    }).countDocuments();
+    }).countDocuments()
     res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
-    });
+    })
   } catch (error) {
-    console.log(error);
+    
     res.status(201).send({
       error: error,
-    });
+    })
   }
-};
+}
 
 const SingleGigsView = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id
     const gig = await GigsModel.find({ _id: mongoose.Types.ObjectId(id) }).populate('user').populate('reviewGig')
     res.status(200).send({
       message: "Gig find Successfully Done",
       data: gig[0],
-    });
+    })
   } catch (err) {
-    res.status(201).send(err);
+    res.status(201).send(err)
   }
-};
+}
 
 const GigsDeleteView = async (req, res) => {
   try {
-    const id = req.params.id;
-    const gig = await GigsModel.deleteOne({ _id: ObjectId(id) });
+    const id = req.params.id
+    const gig = await GigsModel.deleteOne({ _id: ObjectId(id) })
     res.status(200).send({
       message: "Gig Delete Successfully Done",
       product: gig,
-    });
+    })
   } catch (err) {
-    res.status(201).send(err);
+    res.status(201).send(err)
   }
-};
+}
 
 const GigsUpdateView = async (req, res) => {
   const { title, about, description, pricing, images, serviceType, keyworlds } =
-    req.body;
+    req.body
   try {
-    const id = req.params.id;
+    const id = req.params.id
     const gig = await GigsModel.updateOne(
       { _id: mongoose.Types.ObjectId(id) },
       {
@@ -167,12 +167,12 @@ const GigsUpdateView = async (req, res) => {
         serviceType,
         keyworlds,
       }
-    );
-    res.status(200).send(gig);
+    )
+    res.status(200).send(gig)
   } catch (err) {
-    res.status(201).send(err);
+    res.status(201).send(err)
   }
-};
+}
 
 module.exports = {
   GigsPostView,
@@ -183,4 +183,4 @@ module.exports = {
   GigsGetUserView,
   GigsGetCategoryView,
   GigsGetPublicView
-};
+}

@@ -2,7 +2,12 @@ const { Schema, default: mongoose } = require("mongoose");
 
 const ReviewSchema = Schema(
   {
-    reviewUser: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    reviewUser: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    
     reviewReciver: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -18,7 +23,7 @@ const ReviewSchema = Schema(
       required: [true, "Title is Required"],
     },
     star: {
-      type: Number
+      type: Number,
     },
 
     date: { type: Date, default: Date.now },

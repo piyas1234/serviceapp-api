@@ -1,4 +1,4 @@
-const { Schema, default: mongoose } = require("mongoose");
+const { Schema, default: mongoose } = require("mongoose")
 
 const OrderSchema = Schema(
   {
@@ -31,8 +31,8 @@ const OrderSchema = Schema(
     date: { type: Date, default: Date.now },
   },
   { timestamps: true }
-);
+)
 
-const OrderModel = mongoose.model("Order", OrderSchema);
+const OrderModel = mongoose.model("Order", OrderSchema)
 
-module.exports = OrderModel;
+module.exports = OrderModel

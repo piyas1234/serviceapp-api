@@ -1,4 +1,4 @@
-const { Schema, default: mongoose } = require("mongoose");
+const { Schema, default: mongoose } = require("mongoose")
 
 const ServicesSchema = Schema(
   {
@@ -19,9 +19,9 @@ const ServicesSchema = Schema(
     date: { type: Date, default: Date.now },
   },
   { timestamps: true }
-);
+)
 
-const ServiceModel = mongoose.model("Services", ServicesSchema);
+const ServiceModel = mongoose.model("Services", ServicesSchema)
 
 
-module.exports = ServiceModel;
+module.exports = ServiceModel

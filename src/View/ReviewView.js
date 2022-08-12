@@ -9,13 +9,11 @@ const ReviewrPostView = async (req, res) => {
       star,
       reviewGig: mongoose.Types.ObjectId(reviewGig),
       reviewReciver: mongoose.Types.ObjectId(reviewReciver),
-      reviewUser: mongoose.Types.ObjectId(req.id),
+      reviewUser: mongoose.Types.ObjectId(req.id)
     });
     await newReview.save();
     res.status(200).send({ message: "Review added Successfully", newReview });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 const ReviewsGetGigsView = async (req, res) => {
@@ -24,6 +22,7 @@ const ReviewsGetGigsView = async (req, res) => {
   try {
     const data = await reviewModel
       .find({ reviewGig: mongoose.Types.ObjectId(reviewGig) })
+      .populate("reviewUser")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -36,7 +35,6 @@ const ReviewsGetGigsView = async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
-    console.log(error);
     res.status(201).send({
       message: "error",
     });
@@ -48,7 +46,7 @@ const ReviewsGetUserView = async (req, res) => {
   const reviewUser = req.params.id;
   try {
     const data = await reviewModel
-      .find({ reviewUser: mongoose.Types.ObjectId(reviewUser) })
+      .find({ reviewUser: mongoose.Types.ObjectId(reviewUser) }).populate('reviewUser')
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -61,7 +59,6 @@ const ReviewsGetUserView = async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
-    console.log(error);
     res.status(201).send({
       message: "error",
     });

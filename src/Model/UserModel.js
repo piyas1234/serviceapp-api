@@ -42,8 +42,9 @@ const UserSchema = Schema(
       type: Object,
     },
     gigs: [{ type: Schema.Types.ObjectId, ref: "Gigs" }],
-    reviewUser: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+
     reviewReciver: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+    reviewUser: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 
     date: { type: Date, default: Date.now },
   },

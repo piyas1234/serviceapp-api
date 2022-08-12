@@ -1,15 +1,16 @@
-const express = require("express");
+const express = require("express")
+const auth = require("../middlewares/auth")
 const {
   ReviewrPostView,
   ReviewsDeleteView,
   ReviewsGetGigsView,
   ReviewsGetUserView,
-} = require("../View/ReviewView");
+} = require("../View/ReviewView")
 
-const reviewRouter = express();
-reviewRouter.post("/review", ReviewrPostView);
-reviewRouter.get("/review/gig/:id", ReviewsGetGigsView);
-reviewRouter.get("/review/user/:id", ReviewsGetUserView);
-reviewRouter.delete("/review/:id", ReviewsDeleteView);
+const reviewRouter = express()
+reviewRouter.post("/review", auth, ReviewrPostView)
+reviewRouter.get("/review/gig/:id", auth, ReviewsGetGigsView)
+reviewRouter.get("/review/user/:id",auth, ReviewsGetUserView)
+reviewRouter.delete("/review/:id",auth, ReviewsDeleteView)
 
-module.exports = reviewRouter;
+module.exports = reviewRouter
