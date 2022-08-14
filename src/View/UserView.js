@@ -54,7 +54,7 @@ const postUserProfileView = async (req, res, next) => {
   
   try {
     const { name, bio, about, profilePic, coverPic } = req.body
-    console.log(req.body)
+    
     const id = req.id
     const profile = await UserModel.updateOne(
       { _id: mongoose.Types.ObjectId(id) },
@@ -102,7 +102,7 @@ const getUserProfileView = async (req, res, next) => {
     const profile = await UserModel.find({
       _id: mongoose.Types.ObjectId(req.id),
     })
-    console.log(profile)
+    
     res.status(200).send({
       data: profile[0],
     })
@@ -117,7 +117,7 @@ const getPublicProfileView = async (req, res, next) => {
     const profile = await UserModel.find({
       _id: mongoose.Types.ObjectId(req.params.id),
     })
-    console.log(profile)
+ 
     res.status(200).send({
       data: profile[0],
     })
@@ -151,7 +151,7 @@ const LoginUserView = async (req, res, next) => {
         .send({ mesage: "Your have no account with this number" })
     }
 
-    console.log(user)
+    
     var passwordIsValid = req.body.password === user.password
 
     if (!passwordIsValid) {

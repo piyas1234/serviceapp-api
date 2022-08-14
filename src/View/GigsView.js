@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose")
 const GigsModel = require("../Model/GigsModel")
 
 const GigsPostView = async (req, res) => {
-  console.log(req, "req")
+  
   try {
     const {
       title,
@@ -14,7 +14,7 @@ const GigsPostView = async (req, res) => {
       keyworlds,
     } = req.body
 
-    console.log(req.body, "body data")
+  
     const newGigs = await GigsModel({
       user: mongoose.Types.ObjectId(req.id),
       title,
