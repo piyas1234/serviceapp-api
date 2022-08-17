@@ -11,6 +11,8 @@ const connectionRouter = require("./src/Route/ConnectionRoute");
 const orderRouter = require("./src/Route/OrderRoute");
 const reviewRouter = require("./src/Route/ReviewRoute");
 const messageRouter = require("./src/Route/MessageRoute");
+const businessRouter = require("./src/Route/BusinessRoute");
+const JobsRouter = require("./src/Route/JobsRoute");
  
 
 const app = express();
@@ -27,6 +29,8 @@ app.use("", connectionRouter);
 app.use("", messageRouter);
 app.use("", orderRouter);
 app.use("", reviewRouter);
+app.use("", businessRouter);
+app.use("", JobsRouter);
 
 app.get("/", (req, res) => {
   return res.json("Hello World");

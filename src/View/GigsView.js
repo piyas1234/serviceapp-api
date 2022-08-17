@@ -86,7 +86,7 @@ const GigsGetPublicView = async (req, res) => {
       .skip((page - 1) * limit)
       .exec()
     const count = await GigsModel.find({
-      user: mongoose.Types.ObjectId(req.id),
+      user: mongoose.Types.ObjectId(req.params.id),
     }).countDocuments()
     res.status(200).send({
       gigs: data,
