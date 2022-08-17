@@ -33,11 +33,12 @@ const BusinessSchema = Schema(
       required: [true, "Adress is Required"],
     },
     contactNo: {
-      type: Array,
+      type: String,
     },
     businessEmail: {
-      type: Array,
+      type: String,
     },
+
 
     keyworlds: {
       type: Array,

@@ -35,7 +35,7 @@ const connectionPostView = async (req, res) => {
 const GetConnectionView = async (req, res) => {
   try {
     const data = await ConnectionModel.find({
-      user: { $all: [mongoose.Types.ObjectId(req.id)] },
+      users: { $all: [mongoose.Types.ObjectId(req.id)] },
     })
       .populate("users")
       .sort("-messageLastTime");
