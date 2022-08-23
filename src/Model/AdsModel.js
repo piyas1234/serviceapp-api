@@ -1,6 +1,6 @@
 const { Schema, default: mongoose } = require("mongoose");
 
-const BusinessSchema = Schema(
+const AdsSchema = Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     title: {
@@ -9,6 +9,7 @@ const BusinessSchema = Schema(
       minlength: 3,
       trim: true,
     },
+    
     about: {
       type: String,
       required: [true, "About is Required"],
@@ -30,7 +31,6 @@ const BusinessSchema = Schema(
     },
     adress: {
       type: String,
-      required: [true, "Adress is Required"],
     },
     contactNo: {
       type: String,
@@ -44,12 +44,21 @@ const BusinessSchema = Schema(
       required: true,
       required: [true, "keyworlds is Required"],
     },
+    templateColor:{
+        type: String,
+    },
+    butonText:{
+        type: String,
+    },
+    butonLink:{
+        type: String,
+    },
 
     date: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
 
-const BusinessModel = mongoose.model("Business", BusinessSchema);
+const AdsModel = mongoose.model("Ads", AdsSchema);
 
-module.exports = BusinessModel;
+module.exports = AdsModel;

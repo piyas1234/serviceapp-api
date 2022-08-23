@@ -13,13 +13,16 @@ const reviewRouter = require("./src/Route/ReviewRoute");
 const messageRouter = require("./src/Route/MessageRoute");
 const businessRouter = require("./src/Route/BusinessRoute");
 const JobsRouter = require("./src/Route/JobsRoute");
- 
+const adsRouter = require("./src/Route/AdsRoute");
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 dotenv.config();
+const httpServer = require("http").createServer(app);
+const options = { cors: { origin: "*" } };
+const io = require("socket.io")(httpServer, options);
 
 app.use("", userRouter);
 app.use("", servicesRouter);
@@ -31,6 +34,7 @@ app.use("", orderRouter);
 app.use("", reviewRouter);
 app.use("", businessRouter);
 app.use("", JobsRouter);
+app.use("", adsRouter);
 
 app.get("/", (req, res) => {
   return res.json("Hello World");
@@ -48,10 +52,50 @@ mongoose.connect(
 
 mongoose.connection.once("open", () => {
   const port = process.env.PORT || 1000;
-  app.listen(port, () => {
+  httpServer.listen(port, () => {
     console.log(`App listening on port ${port}`);
   });
 });
 mongoose.connection.on("error", (err) => {
   console.log(err);
+});
+
+const messageNamespace = io.of("/messages");
+const onlineNamespace = io.of("/online");
+
+messageNamespace.on("connection", (socket) => {
+  let users;
+  let recivers;
+  socket.on("send", (val, user = "", reciver = "") => {
+    recivers = reciver;
+    users = user;
+    socket.broadcast.emit(reciver, {
+      message: val,
+      id: socket.id,
+      user,
+      reciver,
+      gigs: null,
+    });
+  });
+
+  socket.on("disconnect", (props) => {
+    socket.broadcast.emit(recivers, {
+      message: "offline",
+      id: socket.id,
+      user: users,
+      reciver: recivers,
+      gigs: null,
+    });
+  });
+});
+
+onlineNamespace.on("connection", (socket) => {
+  let id;
+  socket.on("user", (user_id) => {
+    id = user_id;
+    socket.broadcast.emit(user_id, { id: user_id });
+  });
+  socket.on("disconnect", (props) => {
+    socket.broadcast.emit(id, { id: false });
+  });
 });

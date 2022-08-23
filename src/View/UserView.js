@@ -144,7 +144,7 @@ const getPopularUserProfileView = async (req, res, next) => {
 const LoginUserView = async (req, res, next) => {
   try {
     const user = await UserModel.findOne({ phone: req.body.phone })
-
+   console.log(user)
     if (user == null) {
       return res
         .status(201)
