@@ -14,6 +14,8 @@ const messageRouter = require("./src/Route/MessageRoute");
 const businessRouter = require("./src/Route/BusinessRoute");
 const JobsRouter = require("./src/Route/JobsRoute");
 const adsRouter = require("./src/Route/AdsRoute");
+const commentsRouter = require("./src/Route/CommentsRoute");
+const ReactionRouter = require("./src/Route/ReactionRouter");
 
 const app = express();
 app.use(bodyParser.json());
@@ -35,6 +37,8 @@ app.use("", reviewRouter);
 app.use("", businessRouter);
 app.use("", JobsRouter);
 app.use("", adsRouter);
+app.use("", commentsRouter);
+app.use("", ReactionRouter);
 
 app.get("/", (req, res) => {
   return res.json("Hello World");
