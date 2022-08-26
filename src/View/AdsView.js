@@ -60,7 +60,7 @@ const AdsGetPublicView = async (req, res) => {
   try {
     const data = await AdsModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
-    })
+    }).populate("user")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -68,7 +68,7 @@ const AdsGetPublicView = async (req, res) => {
       user: mongoose.Types.ObjectId(req.params.id),
     }).countDocuments();
     res.status(200).send({
-      gigs: data,
+      data: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });

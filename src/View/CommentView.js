@@ -38,6 +38,16 @@ const CommentsGetView = async (req, res) => {
   } catch (error) {}
 };
 
+const CommentsGetCountView = async (req, res) => {
+  const id = req.params.id
+  try {
+    const count = await CommentsModel.find({ads: mongoose.Types.ObjectId(id)}).countDocuments();
+    res.status(200).send({
+      data: count
+    });
+  } catch (error) {}
+};
+
 const CommentsDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
@@ -74,4 +84,5 @@ module.exports = {
   CommentsGetView,
   CommentsDeleteView,
   CommentsUpdateView,
+  CommentsGetCountView
 };

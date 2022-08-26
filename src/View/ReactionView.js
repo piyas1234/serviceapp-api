@@ -9,7 +9,7 @@ const ReactionPostView = async (req, res) => {
       ads: mongoose.Types.ObjectId(ad_id),
     });
 
-    console.log(userReact)
+ 
     if (userReact.length ===0 ) {
       const data = await ReactionModel({
         react: react,

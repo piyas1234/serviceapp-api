@@ -24,7 +24,7 @@ const messagePostView = async (req, res) => {
 const GetMessageView = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+ 
     const data = await MessageModel.find({ connection: mongoose.Types.ObjectId(id) })
       .populate("sender")
       .populate("reciver")

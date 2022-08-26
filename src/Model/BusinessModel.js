@@ -44,6 +44,15 @@ const BusinessSchema = Schema(
       required: true,
       required: [true, "keyworlds is Required"],
     },
+    templateColor:{
+      type: String,
+  },
+  butonText:{
+      type: String,
+  },
+  butonLink:{
+      type: String,
+  },
 
     date: { type: Date, default: Date.now },
   },

@@ -40,7 +40,7 @@ const BusinessGetView = async (req, res) => {
 const BusinessGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query;
   try {
-    const data = await BusinessModel.find({ user: mongoose.Types.ObjectId(req.id) })
+    const data = await BusinessModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate('user')
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -48,7 +48,7 @@ const BusinessGetUserView = async (req, res) => {
       user: mongoose.Types.ObjectId(req.id),
     }).countDocuments();
     res.status(200).send({
-      gigs: data,
+      data: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
@@ -60,7 +60,7 @@ const BusinessGetPublicView = async (req, res) => {
   try {
     const data = await BusinessModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
-    })
+    }).populate('user')
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -68,7 +68,7 @@ const BusinessGetPublicView = async (req, res) => {
       user: mongoose.Types.ObjectId(req.params.id),
     }).countDocuments();
     res.status(200).send({
-      gigs: data,
+      data: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
