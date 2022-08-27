@@ -28,7 +28,7 @@ const GetMessageView = async (req, res) => {
     const data = await MessageModel.find({ connection: mongoose.Types.ObjectId(id) })
       .populate("sender")
       .populate("reciver")
-      .sort("-created_at");
+      .sort("date");
 
     res.status(200).send({
       data: data,

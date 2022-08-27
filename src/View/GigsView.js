@@ -40,7 +40,7 @@ const GigsGetView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query
   try {
     const data = await GigsModel.find({})
-      .populate("user").sort("-created_at")
+      .populate("user").sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -60,7 +60,7 @@ const GigsGetView = async (req, res) => {
 const GigsGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query
   try {
-    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.id) }).sort("-created_at")
+    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.id) }).sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -81,7 +81,7 @@ const GigsGetUserView = async (req, res) => {
 const GigsGetPublicView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query
   try {
-    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.params.id) }).sort("-created_at")
+    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.params.id) }).sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -103,7 +103,7 @@ const GigsGetCategoryView = async (req, res) => {
   try {
     const name = req.params.name
     
-    const data = await GigsModel.find({ serviceType: { $all: [name] } }).sort("-created_at")
+    const data = await GigsModel.find({ serviceType: { $all: [name] } }).sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()

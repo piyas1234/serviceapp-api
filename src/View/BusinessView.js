@@ -23,7 +23,7 @@ const BusinessGetView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
     const data = await BusinessModel.find({})
-      .populate("user").sort("-created_at")
+      .populate("user").sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -40,7 +40,7 @@ const BusinessGetView = async (req, res) => {
 const BusinessGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query;
   try {
-    const data = await BusinessModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate('user').sort("-created_at")
+    const data = await BusinessModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate('user').sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -60,7 +60,7 @@ const BusinessGetPublicView = async (req, res) => {
   try {
     const data = await BusinessModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
-    }).populate('user').sort("-created_at")
+    }).populate('user').sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -80,7 +80,7 @@ const BusinessGetCategoryView = async (req, res) => {
   try {
     const name = req.params.name;
 
-    const data = await BusinessModel.find({ serviceType: { $all: [name] } }).sort("-created_at")
+    const data = await BusinessModel.find({ serviceType: { $all: [name] } }).sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();

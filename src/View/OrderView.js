@@ -23,7 +23,7 @@ const OrderPostView = async (req, res) => {
 const GetBuyerOrderView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query
   try {
-    const data = await OrderModel.find({ buyer: mongoose.Types.ObjectId(req.id) }).populate('gig').populate('seller',"profile").sort("-created_at")
+    const data = await OrderModel.find({ buyer: mongoose.Types.ObjectId(req.id) }).populate('gig').populate('seller',"profile").sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -43,7 +43,7 @@ const GetBuyerOrderView = async (req, res) => {
 const GetSellerOrderView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query
   try {
-    const data = await OrderModel.find({ seller: mongoose.Types.ObjectId(req.id) }).sort("-created_at")
+    const data = await OrderModel.find({ seller: mongoose.Types.ObjectId(req.id) }).sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()

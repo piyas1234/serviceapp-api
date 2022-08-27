@@ -18,7 +18,7 @@ const ServicerPostView = async (req, res) => {
 const ServicesGetView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query
   try {
-    const data = await ServiceModel.find({}).sort("-created_at")
+    const data = await ServiceModel.find({}).sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
