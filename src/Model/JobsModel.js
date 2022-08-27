@@ -28,7 +28,7 @@ const JobsSchema = Schema(
     },
 
     slarayRange:{
-        type:Array
+        type:String
     },
     contactNo: {
         type: Array,

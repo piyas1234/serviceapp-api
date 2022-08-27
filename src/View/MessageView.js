@@ -17,7 +17,7 @@ const messagePostView = async (req, res) => {
       .status(200)
       .send({ message: "New Connction added Successfully", messages });
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -34,7 +34,7 @@ const GetMessageView = async (req, res) => {
       data: data,
     });
   } catch (error) {
-    console.log(error);
+    
     res.status(201).send(error);
   }
 };
