@@ -22,7 +22,7 @@ const ReviewsGetGigsView = async (req, res) => {
   try {
     const data = await reviewModel
       .find({ reviewGig: mongoose.Types.ObjectId(reviewGig) })
-      .populate("reviewUser")
+      .populate("reviewUser").sort("-created_at")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -46,7 +46,7 @@ const ReviewsGetUserView = async (req, res) => {
   const reviewUser = req.params.id;
   try {
     const data = await reviewModel
-      .find({ reviewUser: mongoose.Types.ObjectId(reviewUser) }).populate('reviewUser')
+      .find({ reviewUser: mongoose.Types.ObjectId(reviewUser) }).populate('reviewUser').sort("-created_at")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();

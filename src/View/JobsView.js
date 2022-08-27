@@ -40,7 +40,7 @@ const JobsGetView = async (req, res) => {
 const JobsGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query;
   try {
-    const data = await JobsModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate("user")
+    const data = await JobsModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate("user").sort("-created_at")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -60,7 +60,7 @@ const JobsGetPublicView = async (req, res) => {
   try {
     const data = await JobsModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
-    }).populate('user')
+    }).populate('user').sort("-created_at")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
