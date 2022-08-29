@@ -3,14 +3,14 @@ const MessageModel = require("../Model/MessageModel");
 
 const messagePostView = async (req, res) => {
   try {
-    const { connection, message, reciver,  gigId } = req.body;
-
+    const { connection, message, reciver,  gigId, extra } = req.body;
     const messages = await MessageModel({
       connection: mongoose.Types.ObjectId(connection),
       message: message,
       sender:mongoose.Types.ObjectId(req.id),
       reciver: mongoose.Types.ObjectId(reciver),
       gigId: mongoose.Types.ObjectId(gigId),
+      extra:extra
     });
     await messages.save();
     res

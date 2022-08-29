@@ -104,14 +104,14 @@ const SingleAdsView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await AdsModel.find({ _id: mongoose.Types.ObjectId(id) })
-      .populate("user")
-      .populate("reviewGig");
+      .populate("user") 
     res.status(200).send({
       message: "Ads find Successfully Done",
       data: gig[0],
     });
   } catch (err) {
     res.status(201).send(err);
+    console.log(err)
   }
 };
 

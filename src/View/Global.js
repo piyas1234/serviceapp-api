@@ -1,4 +1,7 @@
+const AdsModel = require("../Model/AdsModel")
+const BusinessModel = require("../Model/BusinessModel")
 const GigsModel = require("../Model/GigsModel")
+const JobsModel = require("../Model/JobsModel")
 const ServiceModel = require("../Model/ServicesModel")
 const UserModel = require("../Model/UserModel")
 
@@ -39,11 +42,15 @@ const getSearchView = async (req, res) => {
   try {
     const { keyward, type } = req.query
     const getSearchData =
-       type  === '0'
-        ? await ServiceModel.find({ name: { $regex: keyward } })
-        : type === '1'
-        ?await GigsModel.find({ title: { $regex: keyward } }).populate("user")
-        : await UserModel.find({ name: { $regex: keyward } })
+       type  === '0' ? await ServiceModel.find({ name: { $regex: keyward } }) :
+        type === '1' ?await GigsModel.find({ title: { $regex: keyward } }).populate("user")  :  
+        type==="2" ? await UserModel.find({ name: { $regex: keyward } }):
+        type==="3" ? await AdsModel.find({ title: { $regex: keyward } }).populate("user").sort("-date"):
+        type==="4" ? await BusinessModel.find({ title: { $regex: keyward } }).populate("user"):
+        type==="5" ? await JobsModel.find({ title: { $regex: keyward } }).populate("user"):null
+
+
+
     res.status(200).send({
       type,
       data:getSearchData

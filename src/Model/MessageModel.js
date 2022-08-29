@@ -26,6 +26,9 @@ const MessageSchema = Schema(
     },
     gigId:{
       type:mongoose.Schema.Types.ObjectId
+    },
+    extra:{
+      type:Object
     }
   },
   { timestamps: true }

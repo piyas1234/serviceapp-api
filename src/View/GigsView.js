@@ -39,8 +39,8 @@ const GigsPostView = async (req, res) => {
 const GigsGetView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query
   try {
-    const data = await GigsModel.find({})
-      .populate("user").sort("date")
+    const data = await GigsModel.find({}).sort("-updatedAt")
+      .populate("user") 
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -60,7 +60,7 @@ const GigsGetView = async (req, res) => {
 const GigsGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query
   try {
-    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.id) }).sort("date")
+    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.id) }).sort("-updatedAt")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -81,7 +81,7 @@ const GigsGetUserView = async (req, res) => {
 const GigsGetPublicView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query
   try {
-    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.params.id) }).sort("date")
+    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.params.id) }).sort("-updatedAt")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()

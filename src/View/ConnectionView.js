@@ -1,26 +1,50 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, connection } = require("mongoose");
 const ConnectionModel = require("../Model/ConnectionModel");
 
 const connectionPostView = async (req, res) => {
   try {
     const { reciver, message } = req.body;
-    const connection = await ConnectionModel.findOne({reciver:reciver, sender:req.id});
-    const connection2 = await ConnectionModel.findOne({reciver:req.id, sender:reciver});
-    
+    const connection = await ConnectionModel.findOne({
+      reciver: reciver,
+      sender: req.id,
+    });
+
+    const connection2 = await ConnectionModel.findOne({
+      reciver: req.id,
+      sender: reciver,
+    });
 
     if (connection) {
-     return  res.status(200).send({ message: "Aleary connected", newConnction:connection });
+      await ConnectionModel.findByIdAndUpdate(
+        { _id: mongoose.Types.ObjectId(connection) },
+        {
+          lastMessage: message,
+        }
+      );
+      return res
+        .status(200)
+        .send({ message: "Aleary connected", newConnction: connection });
     }
-    if (connection) {
-     return res.status(200).send({ message: "Aleary connected", newConnction:connection2 });
+
+    if (connection2) {
+      await ConnectionModel.findByIdAndUpdate(
+        { _id: mongoose.Types.ObjectId(connection2) },
+        {
+          lastMessage: message,
+        }
+      );
+      return res
+        .status(200)
+        .send({ message: "Aleary connected", newConnction: connection2 });
     }
+
     const newConnction = await ConnectionModel({
       users: [
         mongoose.Types.ObjectId(reciver),
         mongoose.Types.ObjectId(req.id),
       ],
       sender: req.id,
-      reciver:reciver,
+      reciver: reciver,
       lastMessage: message,
     });
     await newConnction.save();
@@ -28,7 +52,7 @@ const connectionPostView = async (req, res) => {
       .status(200)
       .send({ message: "New Connction added Successfully", newConnction });
   } catch (error) {
-    
+    console.log(error);
   }
 };
 
@@ -38,13 +62,12 @@ const GetConnectionView = async (req, res) => {
       users: { $all: [mongoose.Types.ObjectId(req.id)] },
     })
       .populate("users")
-      .sort("-messageLastTime");
+      .sort("-updatedAt");
 
     res.status(200).send({
       data: data,
     });
   } catch (error) {
-    
     res.status(201).send(error);
   }
 };
