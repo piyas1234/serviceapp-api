@@ -20,7 +20,7 @@ const AdsPostView = async (req, res) => {
 const AdsGetView = async (req, res) => {
 
 
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 5 } = req.query;
   try {
     const data = await AdsModel.find({})
       .populate("user").sort("-date")
