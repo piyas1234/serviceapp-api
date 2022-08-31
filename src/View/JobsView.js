@@ -8,7 +8,9 @@ const JobsPostView = async (req, res) => {
       ...req.body,
     });
     await business.save();
-    res.status(200).send({ message: "Jobs added Successfully" });
+    res
+      .status(200)
+      .send({ message: "Jobs added Successfully", post: business });
   } catch (error) {
     res.status(201).send({
       message: "error",
@@ -18,12 +20,11 @@ const JobsPostView = async (req, res) => {
 };
 
 const JobsGetView = async (req, res) => {
-
-
   const { page = 1, limit = 20 } = req.query;
   try {
     const data = await JobsModel.find({})
       .populate("user")
+      .sort("-date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -40,7 +41,9 @@ const JobsGetView = async (req, res) => {
 const JobsGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query;
   try {
-    const data = await JobsModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate("user").sort("date")
+    const data = await JobsModel.find({ user: mongoose.Types.ObjectId(req.id) })
+      .populate("user")
+      .sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -60,7 +63,9 @@ const JobsGetPublicView = async (req, res) => {
   try {
     const data = await JobsModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
-    }).populate('user').sort("date")
+    })
+      .populate("user")
+      .sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -103,9 +108,10 @@ const JobsGetCategoryView = async (req, res) => {
 const SingleJobsView = async (req, res) => {
   try {
     const id = req.params.id;
-    const gig = await JobsModel.find({ _id: mongoose.Types.ObjectId(id) })
-      .populate("user")
-      
+    const gig = await JobsModel.find({
+      _id: mongoose.Types.ObjectId(id),
+    }).populate("user");
+
     res.status(200).send({
       message: "Jobs find Successfully Done",
       data: gig[0],
@@ -129,14 +135,13 @@ const JobsDeleteView = async (req, res) => {
 };
 
 const JobsUpdateView = async (req, res) => {
- 
   try {
     const id = req.params.id;
     const gig = await JobsModel.updateOne(
       { _id: mongoose.Types.ObjectId(id) },
       {
         user: req.id,
-         ...req.body
+        ...req.body,
       }
     );
     res.status(200).send(gig);
@@ -146,12 +151,12 @@ const JobsUpdateView = async (req, res) => {
 };
 
 module.exports = {
-    JobsPostView,
-    JobsGetView,
-    JobsGetUserView,
-    JobsGetPublicView,
-    JobsGetCategoryView,
-    SingleJobsView,
-    JobsDeleteView,
-    JobsUpdateView
+  JobsPostView,
+  JobsGetView,
+  JobsGetUserView,
+  JobsGetPublicView,
+  JobsGetCategoryView,
+  SingleJobsView,
+  JobsDeleteView,
+  JobsUpdateView,
 };

@@ -8,7 +8,9 @@ const BusinessPostView = async (req, res) => {
       ...req.body,
     });
     await business.save();
-    res.status(200).send({ message: "Business added Successfully" });
+    res
+      .status(200)
+      .send({ message: "Business added Successfully", post: business });
   } catch (error) {
     res.status(201).send({
       message: "error",
@@ -18,13 +20,12 @@ const BusinessPostView = async (req, res) => {
 };
 
 const BusinessGetView = async (req, res) => {
-
-
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 50 } = req.query;
   try {
     const data = await BusinessModel.find({})
-      .populate("user").sort("date")
+      .populate("user").sort("-date")
       .limit(limit * 1)
+      
       .skip((page - 1) * limit)
       .exec();
 
@@ -40,7 +41,11 @@ const BusinessGetView = async (req, res) => {
 const BusinessGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query;
   try {
-    const data = await BusinessModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate('user').sort("date")
+    const data = await BusinessModel.find({
+      user: mongoose.Types.ObjectId(req.id),
+    })
+      .populate("user")
+      .sort("-date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -60,7 +65,9 @@ const BusinessGetPublicView = async (req, res) => {
   try {
     const data = await BusinessModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
-    }).populate('user').sort("date")
+    })
+      .populate("user")
+      .sort("-date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -80,7 +87,8 @@ const BusinessGetCategoryView = async (req, res) => {
   try {
     const name = req.params.name;
 
-    const data = await BusinessModel.find({ serviceType: { $all: [name] } }).sort("date")
+    const data = await BusinessModel.find({ serviceType: { $all: [name] } })
+      .sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -103,9 +111,10 @@ const BusinessGetCategoryView = async (req, res) => {
 const SingleBusinessView = async (req, res) => {
   try {
     const id = req.params.id;
-    const gig = await BusinessModel.find({ _id: mongoose.Types.ObjectId(id) })
-      .populate("user")
-      
+    const gig = await BusinessModel.find({
+      _id: mongoose.Types.ObjectId(id),
+    }).populate("user");
+
     res.status(200).send({
       message: "Business find Successfully Done",
       data: gig[0],
@@ -129,14 +138,13 @@ const BusinessDeleteView = async (req, res) => {
 };
 
 const BusinessUpdateView = async (req, res) => {
- 
   try {
     const id = req.params.id;
     const gig = await BusinessModel.updateOne(
       { _id: mongoose.Types.ObjectId(id) },
       {
         user: req.id,
-         ...req.body
+        ...req.body,
       }
     );
     res.status(200).send(gig);
@@ -146,12 +154,12 @@ const BusinessUpdateView = async (req, res) => {
 };
 
 module.exports = {
-    BusinessPostView,
-    BusinessGetView,
-    BusinessGetUserView,
-    BusinessGetPublicView,
-    BusinessGetCategoryView,
-    SingleBusinessView,
-    BusinessDeleteView,
-    BusinessUpdateView
+  BusinessPostView,
+  BusinessGetView,
+  BusinessGetUserView,
+  BusinessGetPublicView,
+  BusinessGetCategoryView,
+  SingleBusinessView,
+  BusinessDeleteView,
+  BusinessUpdateView,
 };

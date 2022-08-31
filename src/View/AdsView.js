@@ -8,7 +8,7 @@ const AdsPostView = async (req, res) => {
       ...req.body,
     });
     await business.save();
-    res.status(200).send({ message: "Ads added Successfully" });
+    res.status(200).send({ message: "Ads added Successfully", post : business });
   } catch (error) {
     res.status(201).send({
       message: "error",

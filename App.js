@@ -66,6 +66,9 @@ mongoose.connection.on("error", (err) => {
 
 const messageNamespace = io.of("/messages");
 const onlineNamespace = io.of("/online");
+const adsNamespace = io.of("/ads");
+const jobsNamespace = io.of("/jobs");
+const businessNamespace = io.of("/business");
 
 messageNamespace.on("connection", (socket) => {
   let users;
@@ -101,5 +104,38 @@ onlineNamespace.on("connection", (socket) => {
   });
   socket.on("disconnect", (props) => {
     socket.broadcast.emit(id, { id: false });
+  });
+});
+
+adsNamespace.on("connection", (socket) => {
+  console.log("Connected ads")
+  socket.on("adsnotification", (reciverId, notificationId, sender) => {
+    console.log(reciverId)
+    socket.broadcast.emit(reciverId, {
+      notificationId,
+      sender,
+    });
+  });
+});
+
+
+jobsNamespace.on("connection", (socket) => {
+  socket.on("jobsnotification", (reciverId, notificationId, sender) => {
+    socket.broadcast.emit(reciverId, {
+      notificationId,
+      sender,
+    });
+  });
+});
+
+
+businessNamespace.on("connection", (socket) => {
+  socket.on("businessnotification", (reciverId, notificationId, sender) => {
+
+    console.log(reciverId,'reciverId')
+    socket.broadcast.emit(reciverId, {
+      notificationId,
+      sender,
+    });
   });
 });
