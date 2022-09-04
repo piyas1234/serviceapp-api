@@ -11,6 +11,13 @@ const CommentsSchema = Schema(
       type:String,
       required: [true, "Comment is Required"],
     },
+    reactions: [{ type: Schema.Types.ObjectId, ref: "Reaction" }],
+
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
+    type:{
+      type:String,
+      default:'comments'
+     },
     date: { type: Date, default: Date.now },
   },
   { timestamps: true }

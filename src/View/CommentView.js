@@ -1,15 +1,46 @@
 const { default: mongoose } = require("mongoose");
+const AdsModel = require("../Model/AdsModel");
+const BusinessModel = require("../Model/BusinessModel");
 const CommentsModel = require("../Model/CommentsModel");
+const JobsModel = require("../Model/JobsModel");
 
 const CommentsPostView = async (req, res) => {
-  const { ad_id, comment } = req.body;
+  const { ad_id, comment, postType="ads" } = req.body;
   try {
     const Comments = await CommentsModel({
         comment: comment,
       user: mongoose.Types.ObjectId(req.id),
       ads: mongoose.Types.ObjectId(ad_id),
     });
+    
     await Comments.save();
+    postType === "ads" &&
+        (await AdsModel.updateOne(
+          { _id: mongoose.Types.ObjectId(ad_id) },
+          {
+            $push: {
+              comments: mongoose.Types.ObjectId(Comments),
+            },
+          }
+        ));
+      postType === "business" &&
+        (await BusinessModel.updateOne(
+          { _id: mongoose.Types.ObjectId(ad_id) },
+          {
+            $push: {
+              comments: mongoose.Types.ObjectId(Comments),
+            },
+          }
+        ));
+      postType === "jobs" &&
+        (await JobsModel.updateOne(
+          { _id: mongoose.Types.ObjectId(ad_id) },
+          {
+            $push: {
+              comments: mongoose.Types.ObjectId(Comments),
+            },
+          }
+        ));
     res.status(200).send({ message: "Comments added Successfully" });
   } catch (error) {
     res.status(201).send({
@@ -24,7 +55,7 @@ const CommentsGetView = async (req, res) => {
   const id = req.params.id
   try {
     const data = await CommentsModel.find({ads: mongoose.Types.ObjectId(id)})
-      .populate("user")
+      .populate("user").populate('reactions').populate('comments')
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();

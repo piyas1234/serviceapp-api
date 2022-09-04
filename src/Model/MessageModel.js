@@ -24,12 +24,30 @@ const MessageSchema = Schema(
       type: String,
       required: true,
     },
-    gigId:{
-      type:mongoose.Schema.Types.ObjectId
+    gigId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Gigs",
+      default:null
     },
-    extra:{
-      type:Object
-    }
+    ads: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ads",
+      default:null
+    },
+    jobs: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Jobs",
+      default:null
+    },
+    business: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      default:null
+    },
+
+    extra: {
+      type: Object,
+    },
   },
   { timestamps: true }
 );
