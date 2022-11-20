@@ -75,6 +75,41 @@ const postUserProfileView = async (req, res, next) => {
   }
 }
 
+
+const postUserGuestView = async (req, res, next) => {
+  try {
+    const {
+      name = "guest",
+      phone = "",
+      password = Math.random() * 1000,
+      device = "",
+    } = req.body;
+
+    var token = jwt.sign(
+      { name, phone, password, device },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7 days", // expires in 24 hours
+      }
+    );
+
+    return res.status(200).send({
+      message: `${name} are loggedin successfully!`,
+      auth: true,
+      token: token,
+      role: "Guest",
+      user: {
+        name,
+        phone,
+        password,
+        device,
+      },
+    });
+  } catch (error) {
+    return res.status(201).json(error);
+  }
+};
+
 const updateUserProfileView = async (req, res, next) => {
   try {
     const { notification, pushNotification, fingerprint, twofactorAuth } =
@@ -231,5 +266,6 @@ module.exports = {
   postUserProfileView,
   getUserProfileView,
   updateUserProfileView,
-  getPopularUserProfileView
+  getPopularUserProfileView,
+  postUserGuestView
 }
