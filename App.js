@@ -55,13 +55,13 @@ mongoose.connect(
 );
 
 mongoose.connection.once("open", () => {
-  const port = process.env.PORT || 1000;
+  const port = process.env.PORT || 2000;
   httpServer.listen(port, () => {
     console.log(`App listening on port ${port}`);
   });
 });
 mongoose.connection.on("error", (err) => {
-  console.log(err);
+
 });
 
 const messageNamespace = io.of("/messages");
@@ -108,9 +108,9 @@ onlineNamespace.on("connection", (socket) => {
 });
 
 adsNamespace.on("connection", (socket) => {
-  console.log("Connected ads")
+  
   socket.on("adsnotification", (reciverId, notificationId, sender) => {
-    console.log(reciverId)
+   
     socket.broadcast.emit(reciverId, {
       notificationId,
       sender,
@@ -132,7 +132,7 @@ jobsNamespace.on("connection", (socket) => {
 businessNamespace.on("connection", (socket) => {
   socket.on("businessnotification", (reciverId, notificationId, sender) => {
 
-    console.log(reciverId,'reciverId')
+ 
     socket.broadcast.emit(reciverId, {
       notificationId,
       sender,

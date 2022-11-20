@@ -52,7 +52,7 @@ const connectionPostView = async (req, res) => {
       .status(200)
       .send({ message: "New Connction added Successfully", newConnction });
   } catch (error) {
-    console.log(error);
+   
   }
 };
 

@@ -9,7 +9,7 @@ const AdsSchema = Schema(
       minlength: 3,
       trim: true,
     },
-    
+
     about: {
       type: String,
       required: [true, "About is Required"],
@@ -44,14 +44,22 @@ const AdsSchema = Schema(
       required: true,
       required: [true, "keyworlds is Required"],
     },
-    templateColor:{
-        type: String,
+    templateColor: {
+      type: String,
     },
-    butonText:{
-        type: String,
+    butonText: {
+      type: String,
     },
-    butonLink:{
-        type: String,
+    butonLink: {
+      type: String,
+    },
+
+    reactions: [{ type: Schema.Types.ObjectId, ref: "Reaction" }],
+
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
+    type:{
+     type:String,
+     default:'ads'
     },
 
     date: { type: Date, default: Date.now },

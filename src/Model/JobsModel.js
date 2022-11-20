@@ -57,6 +57,13 @@ const JobsSchema = Schema(
   butonLink:{
       type: String,
   },
+  reactions: [{ type: Schema.Types.ObjectId, ref: "Reaction" }],
+
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
+  type:{
+    type:String,
+    default:'jobs'
+   },
 
     date: { type: Date, default: Date.now },
   },

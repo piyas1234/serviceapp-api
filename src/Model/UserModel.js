@@ -45,6 +45,23 @@ const UserSchema = Schema(
 
     reviewReciver: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     reviewUser: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+    deviceInfo: {
+      type: Object,
+      required: true,
+      default: {},
+    },
+    devices: [
+      {
+        type: Object,
+      },
+    ],
+    active:{
+      type:Boolean,
+      default:false
+
+    },
+    
+
 
     date: { type: Date, default: Date.now },
   },

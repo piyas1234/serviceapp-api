@@ -20,12 +20,14 @@ const BusinessPostView = async (req, res) => {
 };
 
 const BusinessGetView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   try {
     const data = await BusinessModel.find({})
-      .populate("user").sort("-date")
+      .populate("user")
+      .populate("reactions")
+      .populate("comments")
+      .sort("-date")
       .limit(limit * 1)
-      
       .skip((page - 1) * limit)
       .exec();
 
@@ -39,16 +41,19 @@ const BusinessGetView = async (req, res) => {
 };
 
 const BusinessGetUserView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   try {
     const data = await BusinessModel.find({
       user: mongoose.Types.ObjectId(req.id),
     })
-      .populate("user")
-      .sort("-date")
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
+    .populate("user")
+    .populate("reactions")
+    .populate("comments")
+    .sort("-date")
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec();
+
     const count = await BusinessModel.find({
       user: mongoose.Types.ObjectId(req.id),
     }).countDocuments();
@@ -61,16 +66,19 @@ const BusinessGetUserView = async (req, res) => {
 };
 
 const BusinessGetPublicView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   try {
     const data = await BusinessModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
     })
-      .populate("user")
+       .populate("user")
+      .populate("reactions")
+      .populate("comments")
       .sort("-date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
+
     const count = await BusinessModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
     }).countDocuments();
@@ -83,15 +91,18 @@ const BusinessGetPublicView = async (req, res) => {
 };
 
 const BusinessGetCategoryView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   try {
     const name = req.params.name;
 
     const data = await BusinessModel.find({ serviceType: { $all: [name] } })
-      .sort("date")
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
+    .populate("user")
+    .populate("reactions")
+    .populate("comments")
+    .sort("-date")
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec();
 
     const count = await BusinessModel.find({
       serviceType: { $all: [name] },
@@ -113,7 +124,12 @@ const SingleBusinessView = async (req, res) => {
     const id = req.params.id;
     const gig = await BusinessModel.find({
       _id: mongoose.Types.ObjectId(id),
-    }).populate("user");
+    })
+    
+    .populate("user")
+    .populate("reactions")
+    .populate("comments")
+    
 
     res.status(200).send({
       message: "Business find Successfully Done",

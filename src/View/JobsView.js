@@ -23,6 +23,8 @@ const JobsGetView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
     const data = await JobsModel.find({})
+      .populate("reactions")
+      .populate("comments")
       .populate("user")
       .sort("-date")
       .limit(limit * 1)
@@ -38,15 +40,70 @@ const JobsGetView = async (req, res) => {
   } catch (error) {}
 };
 
+// const JobsGetUserView = async (req, res) => {
+//   const { page = 1, limit = 50 } = req.query;
+//   try {
+
+//     const posts = await JobsModel.aggregate([
+//       {
+//         $lookup: {
+//           from: "reactions",
+//           localField: "_id",
+//           foreignField: "ads",
+//           as: "react_count",
+//         },
+//       },
+//       { $addFields: { react_count:  "$react_count" } },
+
+//       {
+//         $lookup: {
+//           from: "comments",
+//           localField: "_id",
+//           foreignField: "ads",
+//           as: "comment_count",
+//         },
+//       },
+//       { $addFields: { comment_count: { $size: "$comment_count" } } },
+
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "user",
+//           foreignField: "_id",
+//           as: "user",
+//         },
+//       },
+//       { $addFields: { user: "$user" } },
+
+//     ])
+//       .sort("-date")
+//       .limit(limit * 1)
+//       .skip((page - 1) * limit)
+//       .exec();
+
+//     const count = await JobsModel.find({
+//       user: mongoose.Types.ObjectId(req.id),
+//     }).countDocuments();
+//     res.status(200).send({
+//       data: posts,
+//       totalPages: Math.ceil(count / limit),
+//       currentPage: page,
+//     });
+//   } catch (error) {}
+// };
+
 const JobsGetUserView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   try {
-    const data = await JobsModel.find({ user: mongoose.Types.ObjectId(req.id) })
-      .populate("user")
-      .sort("date")
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
+    const data = await JobsModel.find({})
+    .populate("reactions")
+    .populate("comments")
+    .populate("user")
+    .sort("-date")
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec();
+
     const count = await JobsModel.find({
       user: mongoose.Types.ObjectId(req.id),
     }).countDocuments();
@@ -59,16 +116,18 @@ const JobsGetUserView = async (req, res) => {
 };
 
 const JobsGetPublicView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   try {
     const data = await JobsModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
     })
-      .populate("user")
-      .sort("date")
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
+    .populate("reactions")
+    .populate("comments")
+    .populate("user")
+    .sort("-date")
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec();
     const count = await JobsModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
     }).countDocuments();
@@ -81,14 +140,18 @@ const JobsGetPublicView = async (req, res) => {
 };
 
 const JobsGetCategoryView = async (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   try {
     const name = req.params.name;
 
     const data = await JobsModel.find({ serviceType: { $all: [name] } })
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
+    .populate("reactions")
+    .populate("comments")
+    .populate("user")
+    .sort("-date")
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec();
 
     const count = await JobsModel.find({
       serviceType: { $all: [name] },
@@ -110,7 +173,11 @@ const SingleJobsView = async (req, res) => {
     const id = req.params.id;
     const gig = await JobsModel.find({
       _id: mongoose.Types.ObjectId(id),
-    }).populate("user");
+    }) 
+    .populate("reactions")
+    .populate("comments")
+    .populate("user")
+    
 
     res.status(200).send({
       message: "Jobs find Successfully Done",

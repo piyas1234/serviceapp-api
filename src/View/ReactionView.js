@@ -1,8 +1,12 @@
 const { default: mongoose } = require("mongoose");
+const AdsModel = require("../Model/AdsModel");
+const BusinessModel = require("../Model/BusinessModel");
+const CommentsModel = require("../Model/CommentsModel");
+const JobsModel = require("../Model/JobsModel");
 const ReactionModel = require("../Model/ReactionModel");
 
 const ReactionPostView = async (req, res) => {
-  const { ad_id, react, id } = req.body;
+  const { ad_id, react, id, postType = "ads" } = req.body;
   try {
     const userReact = await ReactionModel.find({
       user: mongoose.Types.ObjectId(req.id),
@@ -10,23 +14,63 @@ const ReactionPostView = async (req, res) => {
     });
 
  
-    if (userReact.length ===0 ) {
+
+    if (userReact.length === 0) {
       const data = await ReactionModel({
         react: react,
         user: mongoose.Types.ObjectId(req.id),
         ads: mongoose.Types.ObjectId(ad_id),
       });
       await data.save();
+      postType === "ads" &&
+        (await AdsModel.updateOne(
+          { _id: mongoose.Types.ObjectId(ad_id) },
+          {
+            $push: {
+              reactions: mongoose.Types.ObjectId(data),
+            },
+          }
+        ));
+      postType === "business" &&
+        (await BusinessModel.updateOne(
+          { _id: mongoose.Types.ObjectId(ad_id) },
+          {
+            $push: {
+              reactions: mongoose.Types.ObjectId(data),
+            },
+          }
+        ));
+      postType === "jobs" &&
+        (await JobsModel.updateOne(
+          { _id: mongoose.Types.ObjectId(ad_id) },
+          {
+            $push: {
+              reactions: mongoose.Types.ObjectId(data),
+            },
+          }
+        ));
+
+
+        postType === "comments" &&
+        (await CommentsModel.updateOne(
+          { _id: mongoose.Types.ObjectId(ad_id) },
+          {
+            $push: {
+              reactions: mongoose.Types.ObjectId(data),
+            },
+          }
+        ));
       res.status(200).send(data);
     } else {
       const data = await ReactionModel.updateOne(
-        { _id: mongoose.Types.ObjectId(id) },
+        { _id: mongoose.Types.ObjectId(userReact[0]._id) },
         {
           react: react,
           user: mongoose.Types.ObjectId(req.id),
           ads: mongoose.Types.ObjectId(ad_id),
         }
       );
+      
       res.status(200).send(data);
     }
   } catch (error) {
@@ -38,19 +82,20 @@ const ReactionPostView = async (req, res) => {
 };
 
 const ReactionGetView = async (req, res) => {
- 
   const id = req.params.id;
   try {
-    const count = await ReactionModel.find({ ads: mongoose.Types.ObjectId(id) }).countDocuments();
-      
-      const userReact = await ReactionModel.find({
-        user: mongoose.Types.ObjectId(req.id),
-        ads: mongoose.Types.ObjectId(id),
-      }) 
-   
+    const count = await ReactionModel.find({
+      ads: mongoose.Types.ObjectId(id),
+    }).countDocuments();
+
+    const userReact = await ReactionModel.find({
+      user: mongoose.Types.ObjectId(req.id),
+      ads: mongoose.Types.ObjectId(id),
+    });
+
     res.status(200).send({
-       userReact,
-       count
+      userReact,
+      count,
     });
   } catch (error) {}
 };

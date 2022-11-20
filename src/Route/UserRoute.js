@@ -1,5 +1,5 @@
 const express = require("express")
-const { postUserView, LoginUserView, sendPassword, postUserProfileView, getUserProfileView, updateUserProfileView, getPopularUserProfileView } = require("../View/UserView")
+const { postUserView, LoginUserView, sendPassword, postUserProfileView, getUserProfileView, updateUserProfileView, getPopularUserProfileView, postUserGuestView } = require("../View/UserView")
 const auth = require("../middlewares/auth")
 
 
@@ -10,6 +10,7 @@ userRouter.put("/profile",auth, updateUserProfileView)
 userRouter.get("/profile/popular",auth, getPopularUserProfileView)
 userRouter.post("/signup", postUserView)
 userRouter.post("/login", LoginUserView)
+userRouter.post("/guestlogin", postUserGuestView)
 userRouter.get("/sendpassword", sendPassword)
 
 module.exports =  userRouter
