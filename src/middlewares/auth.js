@@ -11,19 +11,22 @@ const auth = async (req, res, next) => {
 
     if (decoded.role === "Guest") {
       req.user = user;
+      req.id = decoded?.id;
+      next();
+      return
+    }else{
+      const user = await UserModel.findOne({
+        _id: decoded.id,
+      });
+      if (!user) {
+        throw new Error();
+      }
+      req.user = user;
       req.id = decoded.id;
       next();
     }
 
-    const user = await UserModel.findOne({
-      _id: decoded.id,
-    });
-    if (!user) {
-      throw new Error();
-    }
-    req.user = user;
-    req.id = decoded.id;
-    next();
+     
   } catch (error) {
     return next(Boom.unauthorized("Not authorized to access this resource"));
   }

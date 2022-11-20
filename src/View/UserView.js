@@ -104,6 +104,8 @@ const postUserGuestView = async (req, res, next) => {
         phone,
         password,
         device,
+        id,
+        role: "Guest",
       },
     });
   } catch (error) {
