@@ -8,7 +8,7 @@ const AdsPostView = async (req, res) => {
       ...req.body,
     });
     await business.save();
-    res.status(200).send({ message: "Ads added Successfully", post: business });
+    res.status(200).send({ message: "Ads added Successfully", post : business });
   } catch (error) {
     res.status(201).send({
       message: "error",
@@ -18,13 +18,12 @@ const AdsPostView = async (req, res) => {
 };
 
 const AdsGetView = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+
+
+  const { page = 1, limit = 5 } = req.query;
   try {
     const data = await AdsModel.find({})
-      .populate("user")
-      .populate("reactions")
-      .populate("comments")
-      .sort("-date")
+      .populate("user").sort("-date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -39,16 +38,12 @@ const AdsGetView = async (req, res) => {
 };
 
 const AdsGetUserView = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 50 } = req.query;
   try {
-    const data = await AdsModel.find({ user: mongoose.Types.ObjectId(req.id) })
-    .populate("user")
-    .populate("reactions")
-    .populate("comments")
-    .sort("-date")
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec();
+    const data = await AdsModel.find({ user: mongoose.Types.ObjectId(req.id) }).populate('user').sort("-date")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
     const count = await AdsModel.find({
       user: mongoose.Types.ObjectId(req.id),
     }).countDocuments();
@@ -61,18 +56,14 @@ const AdsGetUserView = async (req, res) => {
 };
 
 const AdsGetPublicView = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 50 } = req.query;
   try {
     const data = await AdsModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
-    })
-    .populate("user")
-    .populate("reactions")
-    .populate("comments")
-    .sort("-date")
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec();
+    }).populate("user").sort("date")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
     const count = await AdsModel.find({
       user: mongoose.Types.ObjectId(req.params.id),
     }).countDocuments();
@@ -85,19 +76,14 @@ const AdsGetPublicView = async (req, res) => {
 };
 
 const AdsGetCategoryView = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 50 } = req.query;
   try {
     const name = req.params.name;
 
     const data = await AdsModel.find({ serviceType: { $all: [name] } })
-    
-    .populate("user")
-    .populate("reactions")
-    .populate("comments")
-    .sort("-date")
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec();
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
 
     const count = await AdsModel.find({
       serviceType: { $all: [name] },
@@ -117,20 +103,15 @@ const AdsGetCategoryView = async (req, res) => {
 const SingleAdsView = async (req, res) => {
   try {
     const id = req.params.id;
-    const gig = await AdsModel.find({
-      _id: mongoose.Types.ObjectId(id),
-    }) 
-      .populate("user")
-      .populate("reactions")
-      .populate("comments")
-    
+    const gig = await AdsModel.find({ _id: mongoose.Types.ObjectId(id) })
+      .populate("user") 
     res.status(200).send({
       message: "Ads find Successfully Done",
       data: gig[0],
     });
   } catch (err) {
     res.status(201).send(err);
-  
+    console.log(err)
   }
 };
 
@@ -149,13 +130,14 @@ const AdsDeleteView = async (req, res) => {
 };
 
 const AdsUpdateView = async (req, res) => {
+ 
   try {
     const id = req.params.id;
     const gig = await AdsModel.updateOne(
       { _id: mongoose.Types.ObjectId(id) },
       {
         user: req.id,
-        ...req.body,
+         ...req.body
       }
     );
     res.status(200).send(gig);
@@ -165,12 +147,12 @@ const AdsUpdateView = async (req, res) => {
 };
 
 module.exports = {
-  AdsPostView,
-  AdsGetView,
-  AdsGetUserView,
-  AdsGetPublicView,
-  AdsGetCategoryView,
-  SingleAdsView,
-  AdsDeleteView,
-  AdsUpdateView,
+    AdsPostView,
+    AdsGetView,
+    AdsGetUserView,
+    AdsGetPublicView,
+    AdsGetCategoryView,
+    SingleAdsView,
+    AdsDeleteView,
+    AdsUpdateView
 };
