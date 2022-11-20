@@ -10,7 +10,7 @@ userRouter.put("/profile",auth, updateUserProfileView)
 userRouter.get("/profile/popular",auth, getPopularUserProfileView)
 userRouter.post("/signup", postUserView)
 userRouter.post("/login", LoginUserView)
-userRouter.get("/guestlogin", postUserGuestView)
+userRouter.get("/guestlogin", postUserGuestView )
 userRouter.get("/sendpassword", sendPassword)
 
 module.exports =  userRouter
