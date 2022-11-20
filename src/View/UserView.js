@@ -83,10 +83,11 @@ const postUserGuestView = async (req, res, next) => {
       phone = "",
       password = Math.random() * 1000,
       device = "",
+      id = Math.random() * 1000,
     } = req.body;
 
     var token = jwt.sign(
-      { name, phone, password, device },
+      { name, phone, password, device, id },
       process.env.JWT_SECRET,
       {
         expiresIn: "7 days", // expires in 24 hours
