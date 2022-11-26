@@ -1,33 +1,28 @@
-const jwt = require("jsonwebtoken");
-const Boom = require("@hapi/boom");
-const UserModel = require("../Model/UserModel");
+const jwt = require("jsonwebtoken")
+const Boom = require("@hapi/boom")
+const UserModel = require("../Model/UserModel")
 
 const auth = async (req, res, next) => {
-  const { authorization } = req.headers;
-
+  const { authorization } = req.headers
+ 
   try {
-    const token = await authorization.split(" ")[1];
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-
-    if (decoded.role !== "user") {
-      req.user = {...decoded};
-      req.id = decoded.id;
-      next();
-    }
-
+    const token = await authorization.split(" ")[1]
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET)
+    
     const user = await UserModel.findOne({
       _id: decoded.id,
-    });
-
+    })
     if (!user) {
-      throw new Error();
+      throw new Error()
     }
-    req.user = user;
-    req.id = decoded.id;
-    next();
+    req.user = user
+    req.id = decoded.id
+    next()
   } catch (error) {
-    return next(Boom.unauthorized("Not authorized to access this resource"));
+    
+    return next(Boom.unauthorized("Not authorized to access this resource"))
+     
   }
-};
+}
 
-module.exports = auth;
+module.exports = auth
