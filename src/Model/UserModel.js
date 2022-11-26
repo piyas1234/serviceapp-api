@@ -17,11 +17,7 @@ const UserSchema = Schema(
       required: [true, "Phone number is required!"],
       minlength: [10, "Mobile number should be more than 10 number"],
       trim: true,
-      validate: (value) => {
-        if (!validator.isMobilePhone(value)) {
-          throw new Error("Invalid Phone Number");
-        }
-      },
+      
     },
     password: {
       type: String,
