@@ -81,7 +81,21 @@ const postUserGuestView = async (req, res, next) => {
     } = req.body;
     const isUser = await UserModel.findOne({ phone: req.body.phone });
     if (isUser) {
-      return res.status(201).json({ message: "Phone Number Is In Used" });
+      var token = jwt.sign(
+        { id: isUser?._id, name: isUser?.name, role: isUser?.role },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "30 days", // expires in 24 hours
+        }
+      );
+
+      return res.status(200).send({
+        message: `${user.name} are loggedin successfully!`,
+        auth: true,
+        token: token,
+        role: isUser.role,
+        user: isUser,
+      });
     }
 
     const newUser = new UserModel({
