@@ -90,7 +90,7 @@ const postUserGuestView = async (req, res, next) => {
       );
 
       return res.status(200).send({
-        message: `${user.name} are loggedin successfully!`,
+        message: `${isUser.name} are loggedin successfully!`,
         auth: true,
         token: token,
         role: isUser.role,
@@ -121,6 +121,7 @@ const postUserGuestView = async (req, res, next) => {
       user: user,
     });
   } catch (error) {
+     
     return res.status(201).json(error);
   }
 };
