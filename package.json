@@ -5,7 +5,7 @@
   "main": "App.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node App.js"
+    "start": "nodemon App.js"
   },
   "author": "Piyas Talukder",
   "license": "ISC",
@@ -22,14 +22,13 @@
     "mongoose": "^6.3.5",
     "mongoose-unique-validator": "^3.1.0",
     "nodemailer": "^6.7.5",
+    "nodemon": "^2.0.20",
     "secure-random-password": "^0.2.3",
     "socket.io": "^4.5.1",
     "twilio": "^3.77.3",
     "validator": "^13.7.0"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  },
+  "devDependencies": {},
   "engines": {
     "node": "18.11.0"
   }
