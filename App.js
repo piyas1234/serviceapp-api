@@ -21,6 +21,7 @@ const ReactionRouter = require("./src/Route/ReactionRouter");
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cors());
 dotenv.config();
 const httpServer = require("http").createServer(app);
@@ -49,11 +50,15 @@ mongoose.connect(
   process.env.NODE_ENV === "test"
     ? process.env.MONGO_TEST_URI
     : process.env.MONGO_URI,
-  {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  }
-);
+  
+    {
+      useNewUrlParser: true, 
+      useUnifiedTopology: true
+    }
+  
+).then(res=> {
+   console.log(res, 'res');
+}).catch(e=> console.log(e, 'error'));
 
 mongoose.connection.once("open", () => {
   const port = process.env.PORT || 2000;
@@ -61,9 +66,14 @@ mongoose.connection.once("open", () => {
     console.log(`App listening on port ${port}`);
   });
 });
-mongoose.connection.on("error", (err) => {
-  console.log(err);
-});
+
+mongoose.connection.on("open", ()=>{
+  const port = process.env.PORT || 2000;
+  httpServer.listen(port, () => {
+    console.log(`App listening on port ${port}`);
+  });
+})
+ 
 
 const messageNamespace = io.of("/messages");
 const onlineNamespace = io.of("/online");

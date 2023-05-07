@@ -1,5 +1,7 @@
+const { default: mongoose } = require("mongoose")
 const AdsModel = require("../Model/AdsModel")
 const BusinessModel = require("../Model/BusinessModel")
+const ConnectionModel = require("../Model/ConnectionModel")
 const GigsModel = require("../Model/GigsModel")
 const JobsModel = require("../Model/JobsModel")
 const ServiceModel = require("../Model/ServicesModel")
@@ -61,10 +63,7 @@ const getSearchView = async (req, res) => {
   }
 }
 
-module.exports = {
-  getHomeView,
-  getSearchView,
-}
+ 
 
 
 const getSearchServiceView = async (req, res) => {
@@ -81,8 +80,89 @@ const getSearchServiceView = async (req, res) => {
   }
 }
 
+
+
+const getAllDataForInitialPages= async ( req , res )=>{
+  const { page = 1, limit = 20 } = req.query;
+  try {
+    const adsdata = await AdsModel.find({})
+      .populate("user")
+      .populate("reactions")
+      .populate("comments")
+      .sort("-date")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+      const businessdata = await BusinessModel.find({})
+      .populate("user")
+      .populate("reactions")
+      .populate("comments")
+      .sort("-date")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+      const gigsdata = await GigsModel.find({}).sort("-updatedAt")
+      .populate("user") 
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec()
+
+      const jobsdata = await JobsModel.find({})
+      .populate("reactions")
+      .populate("comments")
+      .populate("user")
+      .sort("-date")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+      const serviceprovider = await UserModel.find({}).limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+      const connectiondata = await ConnectionModel.find({
+        users: { $all: [mongoose.Types.ObjectId(req.id)] },
+      })
+        .populate("users")
+        .sort("-updatedAt");
+
+
+        const servicedata = await ServiceModel.find({}).sort("date")
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec()
+
+        const profile = await UserModel.find({
+          _id: mongoose.Types.ObjectId(req.id),
+        });
+
+
+
+    
+    res.status(200).send({
+      adsdata: adsdata,
+      businessdata: businessdata,
+      gigsdata:gigsdata,
+      jobsdata:jobsdata,
+      connectiondata: connectiondata,
+      servicedata:servicedata,
+      serviceprovider:serviceprovider,
+      profile:profile[0]
+
+      
+    });
+  }
+   catch (error) {
+    res.status(400).send(error)
+    
+  }
+}
+
 module.exports = {
   getHomeView,
   getSearchView,
-  getSearchServiceView
+  getSearchServiceView,
+  getAllDataForInitialPages
 }
