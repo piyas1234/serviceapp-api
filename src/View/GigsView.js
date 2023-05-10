@@ -16,7 +16,7 @@ const GigsPostView = async (req, res) => {
 
   
     const newGigs = await GigsModel({
-      user: mongoose.Types.ObjectId(req.id),
+      user: new mongoose.Types.ObjectId(req.id),
       title,
       about,
       description,
@@ -60,12 +60,12 @@ const GigsGetView = async (req, res) => {
 const GigsGetUserView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query
   try {
-    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.id) }).sort("-updatedAt")
+    const data = await GigsModel.find({ user: new mongoose.Types.ObjectId(req.id) }).sort("-updatedAt")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
     const count = await GigsModel.find({
-      user: mongoose.Types.ObjectId(req.id),
+      user: new mongoose.Types.ObjectId(req.id),
     }).countDocuments()
     res.status(200).send({
       gigs: data,
@@ -81,12 +81,12 @@ const GigsGetUserView = async (req, res) => {
 const GigsGetPublicView = async (req, res) => {
   const { page = 1, limit = 50 } = req.query
   try {
-    const data = await GigsModel.find({ user: mongoose.Types.ObjectId(req.params.id) }).sort("-updatedAt")
+    const data = await GigsModel.find({ user: new mongoose.Types.ObjectId(req.params.id) }).sort("-updatedAt")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
     const count = await GigsModel.find({
-      user: mongoose.Types.ObjectId(req.params.id),
+      user: new mongoose.Types.ObjectId(req.params.id),
     }).countDocuments()
     res.status(200).send({
       gigs: data,
@@ -127,7 +127,7 @@ const GigsGetCategoryView = async (req, res) => {
 const SingleGigsView = async (req, res) => {
   try {
     const id = req.params.id
-    const gig = await GigsModel.find({ _id: mongoose.Types.ObjectId(id) }).populate('user').populate('reviewGig')
+    const gig = await GigsModel.find({ _id: new mongoose.Types.ObjectId(id) }).populate('user').populate('reviewGig')
     res.status(200).send({
       message: "Gig find Successfully Done",
       data: gig[0],
@@ -156,7 +156,7 @@ const GigsUpdateView = async (req, res) => {
   try {
     const id = req.params.id
     const gig = await GigsModel.updateOne(
-      { _id: mongoose.Types.ObjectId(id) },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         user: req.id,
         title,

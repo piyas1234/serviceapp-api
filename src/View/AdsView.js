@@ -4,7 +4,7 @@ const AdsModel = require("../Model/AdsModel");
 const AdsPostView = async (req, res) => {
   try {
     const business = await AdsModel({
-      user: mongoose.Types.ObjectId(req.id),
+      user:  new mongoose.Types.ObjectId(req.id),
       ...req.body,
     });
     await business.save();
@@ -29,6 +29,7 @@ const AdsGetView = async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
 
+      
     const count = await AdsModel.countDocuments();
     res.status(200).send({
       gigs: data,
@@ -50,7 +51,7 @@ const AdsGetUserView = async (req, res) => {
     .skip((page - 1) * limit)
     .exec();
     const count = await AdsModel.find({
-      user: mongoose.Types.ObjectId(req.id),
+      user: new mongoose.Types.ObjectId(req.id),
     }).countDocuments();
     res.status(200).send({
       gigs: data,
@@ -64,7 +65,7 @@ const AdsGetPublicView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
     const data = await AdsModel.find({
-      user: mongoose.Types.ObjectId(req.params.id),
+      user: new mongoose.Types.ObjectId(req.params.id),
     })
     .populate("user")
     .populate("reactions")
@@ -74,7 +75,7 @@ const AdsGetPublicView = async (req, res) => {
     .skip((page - 1) * limit)
     .exec();
     const count = await AdsModel.find({
-      user: mongoose.Types.ObjectId(req.params.id),
+      user: new mongoose.Types.ObjectId(req.params.id),
     }).countDocuments();
     res.status(200).send({
       data: data,
@@ -118,7 +119,7 @@ const SingleAdsView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await AdsModel.find({
-      _id: mongoose.Types.ObjectId(id),
+      _id: new mongoose.Types.ObjectId(id),
     }) 
       .populate("user")
       .populate("reactions")
@@ -151,7 +152,7 @@ const AdsUpdateView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await AdsModel.updateOne(
-      { _id: mongoose.Types.ObjectId(id) },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         user: req.id,
         ...req.body,

@@ -55,7 +55,7 @@ const postUserProfileView = async (req, res, next) => {
 
     const id = req.id;
     const profile = await UserModel.updateOne(
-      { _id: mongoose.Types.ObjectId(id) },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         name: name,
         profile: {
@@ -133,7 +133,7 @@ const updateUserProfileView = async (req, res, next) => {
 
     const id = req.id;
     const profile = await UserModel.updateOne(
-      { _id: mongoose.Types.ObjectId(id) },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         notification,
         pushNotification,
@@ -150,13 +150,15 @@ const updateUserProfileView = async (req, res, next) => {
 const getUserProfileView = async (req, res, next) => {
   try {
     const profile = await UserModel.find({
-      _id: mongoose.Types.ObjectId(req.id),
+      _id: new mongoose.Types.ObjectId(req.id),
     });
 
     res.status(200).send({
       data: profile[0],
     });
   } catch (error) {
+
+    console.log(error)
     return res.status(201).json(error);
   }
 };
@@ -164,7 +166,7 @@ const getUserProfileView = async (req, res, next) => {
 const getPublicProfileView = async (req, res, next) => {
   try {
     const profile = await UserModel.find({
-      _id: mongoose.Types.ObjectId(req.params.id),
+      _id: new mongoose.Types.ObjectId(req.params.id),
     });
 
     res.status(200).send({

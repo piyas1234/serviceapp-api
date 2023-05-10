@@ -14,14 +14,14 @@ const messagePostView = async (req, res) => {
       business = null,
     } = req.body;
     const messages = await MessageModel({
-      connection: mongoose.Types.ObjectId(connection),
+      connection: new mongoose.Types.ObjectId(connection),
       message: message,
-      sender: mongoose.Types.ObjectId(req.id),
-      reciver: mongoose.Types.ObjectId(reciver),
-      gigId: mongoose.Types.ObjectId(gigId),
-      ads: mongoose.Types.ObjectId(ads),
-      jobs: mongoose.Types.ObjectId(jobs),
-      business: mongoose.Types.ObjectId(business),
+      sender: new mongoose.Types.ObjectId(req.id),
+      reciver: new mongoose.Types.ObjectId(reciver),
+      gigId: new mongoose.Types.ObjectId(gigId),
+      ads: new mongoose.Types.ObjectId(ads),
+      jobs: new mongoose.Types.ObjectId(jobs),
+      business: new mongoose.Types.ObjectId(business),
       extra: extra,
     });
     await messages.save();
@@ -36,7 +36,7 @@ const GetMessageView = async (req, res) => {
     const id = req.params.id;
 
     const data = await MessageModel.find({
-      connection: mongoose.Types.ObjectId(id),
+      connection: new mongoose.Types.ObjectId(id),
     })
       .populate("sender")
       .populate("reciver")
@@ -100,7 +100,7 @@ const SingleMessageDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
     const del = await MessageModel.deleteOne({
-      _id: mongoose.Types.ObjectId(id),
+      _id: new mongoose.Types.ObjectId(id),
     });
     res.status(200).send({
       message: "Delete Successfully Done",

@@ -4,7 +4,7 @@ const BusinessModel = require("../Model/BusinessModel");
 const BusinessPostView = async (req, res) => {
   try {
     const business = await BusinessModel({
-      user: mongoose.Types.ObjectId(req.id),
+      user: new mongoose.Types.ObjectId(req.id),
       ...req.body,
     });
     await business.save();
@@ -44,7 +44,7 @@ const BusinessGetUserView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
     const data = await BusinessModel.find({
-      user: mongoose.Types.ObjectId(req.id),
+      user: new mongoose.Types.ObjectId(req.id),
     })
     .populate("user")
     .populate("reactions")
@@ -55,7 +55,7 @@ const BusinessGetUserView = async (req, res) => {
     .exec();
 
     const count = await BusinessModel.find({
-      user: mongoose.Types.ObjectId(req.id),
+      user: new mongoose.Types.ObjectId(req.id),
     }).countDocuments();
     res.status(200).send({
       data: data,
@@ -69,7 +69,7 @@ const BusinessGetPublicView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
     const data = await BusinessModel.find({
-      user: mongoose.Types.ObjectId(req.params.id),
+      user: new mongoose.Types.ObjectId(req.params.id),
     })
        .populate("user")
       .populate("reactions")
@@ -80,7 +80,7 @@ const BusinessGetPublicView = async (req, res) => {
       .exec();
 
     const count = await BusinessModel.find({
-      user: mongoose.Types.ObjectId(req.params.id),
+      user: new mongoose.Types.ObjectId(req.params.id),
     }).countDocuments();
     res.status(200).send({
       data: data,
@@ -123,7 +123,7 @@ const SingleBusinessView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await BusinessModel.find({
-      _id: mongoose.Types.ObjectId(id),
+      _id: new mongoose.Types.ObjectId(id),
     })
     
     .populate("user")
@@ -157,7 +157,7 @@ const BusinessUpdateView = async (req, res) => {
   try {
     const id = req.params.id;
     const gig = await BusinessModel.updateOne(
-      { _id: mongoose.Types.ObjectId(id) },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         user: req.id,
         ...req.body,

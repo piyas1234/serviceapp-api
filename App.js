@@ -21,7 +21,6 @@ const ReactionRouter = require("./src/Route/ReactionRouter");
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.json());
 app.use(cors());
 dotenv.config();
 const httpServer = require("http").createServer(app);
@@ -50,15 +49,12 @@ mongoose.connect(
   process.env.NODE_ENV === "test"
     ? process.env.MONGO_TEST_URI
     : process.env.MONGO_URI,
-  
-    {
-      useNewUrlParser: true, 
-      useUnifiedTopology: true
-    }
-  
-).then(res=> {
-   console.log(res, 'res');
-}).catch(e=> console.log(e, 'error'));
+
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 mongoose.connection.once("open", () => {
   const port = process.env.PORT || 2000;
@@ -66,14 +62,7 @@ mongoose.connection.once("open", () => {
     console.log(`App listening on port ${port}`);
   });
 });
-
-mongoose.connection.on("open", ()=>{
-  const port = process.env.PORT || 2000;
-  httpServer.listen(port, () => {
-    console.log(`App listening on port ${port}`);
-  });
-})
- 
+mongoose.connection.on("error", (err) => {});
 
 const messageNamespace = io.of("/messages");
 const onlineNamespace = io.of("/online");
@@ -119,16 +108,15 @@ onlineNamespace.on("connection", (socket) => {
 });
 
 adsNamespace.on("connection", (socket) => {
-  console.log("Connected ads")
+  console.log("Connected ads");
   socket.on("adsnotification", (reciverId, notificationId, sender) => {
-    console.log(reciverId)
+    console.log(reciverId);
     socket.broadcast.emit(reciverId, {
       notificationId,
       sender,
     });
   });
 });
-
 
 jobsNamespace.on("connection", (socket) => {
   socket.on("jobsnotification", (reciverId, notificationId, sender) => {
@@ -139,11 +127,9 @@ jobsNamespace.on("connection", (socket) => {
   });
 });
 
-
 businessNamespace.on("connection", (socket) => {
   socket.on("businessnotification", (reciverId, notificationId, sender) => {
-
-    console.log(reciverId,'reciverId')
+    console.log(reciverId, "reciverId");
     socket.broadcast.emit(reciverId, {
       notificationId,
       sender,

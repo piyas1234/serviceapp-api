@@ -7,9 +7,9 @@ const ReviewrPostView = async (req, res) => {
     const newReview = await reviewModel({
       description,
       star,
-      reviewGig: mongoose.Types.ObjectId(reviewGig),
-      reviewReciver: mongoose.Types.ObjectId(reviewReciver),
-      reviewUser: mongoose.Types.ObjectId(req.id)
+      reviewGig: new mongoose.Types.ObjectId(reviewGig),
+      reviewReciver: new mongoose.Types.ObjectId(reviewReciver),
+      reviewUser: new mongoose.Types.ObjectId(req.id)
     });
     await newReview.save();
     res.status(200).send({ message: "Review added Successfully", newReview });
@@ -21,13 +21,13 @@ const ReviewsGetGigsView = async (req, res) => {
   const reviewGig = req.params.id;
   try {
     const data = await reviewModel
-      .find({ reviewGig: mongoose.Types.ObjectId(reviewGig) })
+      .find({ reviewGig: new mongoose.Types.ObjectId(reviewGig) })
       .populate("reviewUser").sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
     const count = await reviewModel
-      .find({ reviewGig: mongoose.Types.ObjectId(reviewGig) })
+      .find({ reviewGig: new mongoose.Types.ObjectId(reviewGig) })
       .countDocuments();
     res.status(200).send({
       data: data,
@@ -46,12 +46,12 @@ const ReviewsGetUserView = async (req, res) => {
   const reviewUser = req.params.id;
   try {
     const data = await reviewModel
-      .find({ reviewUser: mongoose.Types.ObjectId(reviewUser) }).populate('reviewUser').sort("date")
+      .find({ reviewUser: new mongoose.Types.ObjectId(reviewUser) }).populate('reviewUser').sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
     const count = await reviewModel
-      .find({ reviewUser: mongoose.Types.ObjectId(reviewUser) })
+      .find({ reviewUser: new mongoose.Types.ObjectId(reviewUser) })
       .countDocuments();
     res.status(200).send({
       data: data,
@@ -69,7 +69,7 @@ const ReviewsDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await reviewModel.deleteOne({
-      _id: mongoose.Types.ObjectId(id),
+      _id: new mongoose.Types.ObjectId(id),
     });
     res.status(200).send({
       message: "Delete Review Successfully Done",

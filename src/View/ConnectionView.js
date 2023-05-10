@@ -16,7 +16,7 @@ const connectionPostView = async (req, res) => {
 
     if (connection) {
       await ConnectionModel.findByIdAndUpdate(
-        { _id: mongoose.Types.ObjectId(connection) },
+        { _id: new mongoose.Types.ObjectId(connection) },
         {
           lastMessage: message,
         }
@@ -28,7 +28,7 @@ const connectionPostView = async (req, res) => {
 
     if (connection2) {
       await ConnectionModel.findByIdAndUpdate(
-        { _id: mongoose.Types.ObjectId(connection2) },
+        { _id: new mongoose.Types.ObjectId(connection2) },
         {
           lastMessage: message,
         }
@@ -40,8 +40,8 @@ const connectionPostView = async (req, res) => {
 
     const newConnction = await ConnectionModel({
       users: [
-        mongoose.Types.ObjectId(reciver),
-        mongoose.Types.ObjectId(req.id),
+        new mongoose.Types.ObjectId(reciver),
+        new mongoose.Types.ObjectId(req.id),
       ],
       sender: req.id,
       reciver: reciver,
@@ -59,7 +59,7 @@ const connectionPostView = async (req, res) => {
 const GetConnectionView = async (req, res) => {
   try {
     const data = await ConnectionModel.find({
-      users: { $all: [mongoose.Types.ObjectId(req.id)] },
+      users: { $all: [new mongoose.Types.ObjectId(req.id)] },
     })
       .populate("users")
       .sort("-updatedAt");
@@ -76,7 +76,7 @@ const SingleConnectionView = async (req, res) => {
   try {
     const id = req.params.id;
     const connection = await ConnectionModel.find({
-      _id: mongoose.Types.ObjectId(id),
+      _id: new mongoose.Types.ObjectId(id),
     }).populate("messages");
     res.status(200).send({
       message: "Connection find Successfully Done",
@@ -91,7 +91,7 @@ const SingleConnectionDeleteView = async (req, res) => {
   try {
     const id = req.params.id;
     const del = await ConnectionModel.deleteOne({
-      _id: mongoose.Types.ObjectId(id),
+      _id: new mongoose.Types.ObjectId(id),
     });
     res.status(200).send({
       message: "Delete Successfully Done",

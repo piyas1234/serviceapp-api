@@ -39,7 +39,7 @@ const ServicesGetView = async (req, res) => {
 const ServicesDeleteView = async (req, res) => {
   try {
     const id = req.params.id
-    const product = await ServiceModel.deleteOne({ _id: mongoose.Types.ObjectId(id) })
+    const product = await ServiceModel.deleteOne({ _id: new mongoose.Types.ObjectId(id) })
       res.status(200).send({
       message: "Delete Service Successfully Done",
       product: product,
@@ -53,7 +53,7 @@ const ServicesUpdateView = async (req, res) => {
   try {
     const id = req.params.id
     const product = await ServiceModel.updateOne(
-      { _id: mongoose.Types.ObjectId(id) },
+      { _id: new mongoose.Types.ObjectId(id) },
       req.body
     )
     await res.status(200).send(product)

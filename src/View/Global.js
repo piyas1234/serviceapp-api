@@ -123,7 +123,7 @@ const getAllDataForInitialPages= async ( req , res )=>{
       .exec();
 
       const connectiondata = await ConnectionModel.find({
-        users: { $all: [mongoose.Types.ObjectId(req.id)] },
+        users: { $all: [new mongoose.Types.ObjectId(req.id)] },
       })
         .populate("users")
         .sort("-updatedAt");
@@ -135,9 +135,24 @@ const getAllDataForInitialPages= async ( req , res )=>{
         .exec()
 
         const profile = await UserModel.find({
-          _id: mongoose.Types.ObjectId(req.id),
+          _id: new mongoose.Types.ObjectId(req.id),
         });
 
+
+
+     const ads = await AdsModel.countDocuments() 
+     const adsCount =  Math.ceil(ads / limit);
+
+     const business = await BusinessModel.countDocuments() 
+     const businessCount  =  Math.ceil(business / limit);
+
+     const gigs  = await GigsModel.countDocuments() 
+     const gigsCount  =  Math.ceil(gigs / limit);
+
+     const jobs  = await JobsModel.countDocuments() 
+     const jobsCount   =  Math.ceil(jobs / limit);
+
+     
 
 
     
@@ -149,7 +164,11 @@ const getAllDataForInitialPages= async ( req , res )=>{
       connectiondata: connectiondata,
       servicedata:servicedata,
       serviceprovider:serviceprovider,
-      profile:profile[0]
+      profile:profile[0],
+      adsCount:adsCount,
+      jobsCount:jobsCount,
+      businessCount:businessCount,
+      gigsCount:gigsCount 
 
       
     });

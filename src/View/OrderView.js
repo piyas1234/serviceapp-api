@@ -5,9 +5,9 @@ const OrderPostView = async (req, res) => {
   const { seller, description, pricing , gig} = req.body
   try {
     const order = await OrderModel({
-      seller:mongoose.Types.ObjectId(seller),
-      buyer:mongoose.Types.ObjectId(req.id),
-      gig:mongoose.Types.ObjectId(gig),
+      seller:new mongoose.Types.ObjectId(seller),
+      buyer:new mongoose.Types.ObjectId(req.id),
+      gig:new mongoose.Types.ObjectId(gig),
       description,
       pricing,
        
@@ -23,12 +23,12 @@ const OrderPostView = async (req, res) => {
 const GetBuyerOrderView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query
   try {
-    const data = await OrderModel.find({ buyer: mongoose.Types.ObjectId(req.id) }).populate('gig').populate('seller',"profile").sort("date")
+    const data = await OrderModel.find({ buyer: new mongoose.Types.ObjectId(req.id) }).populate('gig').populate('seller',"profile").sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
     const count = await OrderModel.find({
-      buyer: mongoose.Types.ObjectId(req.id),
+      buyer: new mongoose.Types.ObjectId(req.id),
     }).countDocuments()
       res.status(200).send({
       gigs: data,
@@ -43,12 +43,12 @@ const GetBuyerOrderView = async (req, res) => {
 const GetSellerOrderView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query
   try {
-    const data = await OrderModel.find({ seller: mongoose.Types.ObjectId(req.id) }).sort("date")
+    const data = await OrderModel.find({ seller: new mongoose.Types.ObjectId(req.id) }).sort("date")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
     const count = await OrderModel.find({
-      buyer: mongoose.Types.ObjectId(req.id),
+      buyer: new mongoose.Types.ObjectId(req.id),
     }).countDocuments()
       res.status(200).send({
       gigs: data,
@@ -63,7 +63,7 @@ const GetSellerOrderView = async (req, res) => {
 const SingleBuyerOrderView = async (req, res) => {
   try {
     const id = req.params.id
-    const gig = await OrderModel.find({ buyer: mongoose.Types.ObjectId(id) })
+    const gig = await OrderModel.find({ buyer: new mongoose.Types.ObjectId(id) })
       res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
@@ -76,7 +76,7 @@ const SingleBuyerOrderView = async (req, res) => {
 const SingleSellerOrderView = async (req, res) => {
   try {
     const id = req.params.id
-    const gig = await OrderModel.find({ seller: mongoose.Types.ObjectId(id) })
+    const gig = await OrderModel.find({ seller: new mongoose.Types.ObjectId(id) })
       res.status(200).send({
       message: "Gig find Successfully Done",
       product: gig,
@@ -91,7 +91,7 @@ const SingleBuyerOrderUpdateView = async (req, res) => {
     const id = req.id
     const status = req.params.status
     const gig = await OrderModel.updateOne(
-      { buyer: mongoose.Types.ObjectId(id) },
+      { buyer: new mongoose.Types.ObjectId(id) },
       {
         status: status,
       }

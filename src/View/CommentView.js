@@ -9,35 +9,35 @@ const CommentsPostView = async (req, res) => {
   try {
     const Comments = await CommentsModel({
         comment: comment,
-      user: mongoose.Types.ObjectId(req.id),
-      ads: mongoose.Types.ObjectId(ad_id),
+      user: new mongoose.Types.ObjectId(req.id),
+      ads: new mongoose.Types.ObjectId(ad_id),
     });
     
     await Comments.save();
     postType === "ads" &&
         (await AdsModel.updateOne(
-          { _id: mongoose.Types.ObjectId(ad_id) },
+          { _id: new mongoose.Types.ObjectId(ad_id) },
           {
             $push: {
-              comments: mongoose.Types.ObjectId(Comments),
+              comments: new mongoose.Types.ObjectId(Comments),
             },
           }
         ));
       postType === "business" &&
         (await BusinessModel.updateOne(
-          { _id: mongoose.Types.ObjectId(ad_id) },
+          { _id: new mongoose.Types.ObjectId(ad_id) },
           {
             $push: {
-              comments: mongoose.Types.ObjectId(Comments),
+              comments: new mongoose.Types.ObjectId(Comments),
             },
           }
         ));
       postType === "jobs" &&
         (await JobsModel.updateOne(
-          { _id: mongoose.Types.ObjectId(ad_id) },
+          { _id: new mongoose.Types.ObjectId(ad_id) },
           {
             $push: {
-              comments: mongoose.Types.ObjectId(Comments),
+              comments: new mongoose.Types.ObjectId(Comments),
             },
           }
         ));
@@ -54,13 +54,13 @@ const CommentsGetView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   const id = req.params.id
   try {
-    const data = await CommentsModel.find({ads: mongoose.Types.ObjectId(id)})
+    const data = await CommentsModel.find({ads: new mongoose.Types.ObjectId(id)})
       .populate("user").populate('reactions').populate('comments')
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
 
-    const count = await CommentsModel.find({ads: mongoose.Types.ObjectId(id)}).countDocuments();
+    const count = await CommentsModel.find({ads: new mongoose.Types.ObjectId(id)}).countDocuments();
     res.status(200).send({
       data: data,
       totalPages: Math.ceil(count / limit),
@@ -72,7 +72,7 @@ const CommentsGetView = async (req, res) => {
 const CommentsGetCountView = async (req, res) => {
   const id = req.params.id
   try {
-    const count = await CommentsModel.find({ads: mongoose.Types.ObjectId(id)}).countDocuments();
+    const count = await CommentsModel.find({ads: new mongoose.Types.ObjectId(id)}).countDocuments();
     res.status(200).send({
       data: count
     });
@@ -97,11 +97,11 @@ const CommentsUpdateView = async (req, res) => {
     const { ad_id, comment } = req.body;
     const id = req.params.id;
     const data = await CommentsModel.updateOne(
-      { _id: mongoose.Types.ObjectId(id) },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         comment: comment,
-        user: mongoose.Types.ObjectId(req.id),
-        ads: mongoose.Types.ObjectId(ad_id),
+        user: new mongoose.Types.ObjectId(req.id),
+        ads: new mongoose.Types.ObjectId(ad_id),
       }
     );
     res.status(200).send(data);
