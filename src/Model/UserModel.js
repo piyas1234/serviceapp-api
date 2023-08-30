@@ -38,6 +38,9 @@ const UserSchema = Schema(
       type: Object,
     },
     gigs: [{ type: Schema.Types.ObjectId, ref: "Gigs" }],
+    jobs: [{ type: Schema.Types.ObjectId, ref: "Jobs" }],
+    business: [{ type: Schema.Types.ObjectId, ref: "Business" }],
+    ads: [{ type: Schema.Types.ObjectId, ref: "Ads" }],
 
     reviewReciver: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     reviewUser: [{ type: Schema.Types.ObjectId, ref: "Review" }],

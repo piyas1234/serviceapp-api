@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const BusinessModel = require("../Model/BusinessModel");
+const UserModel = require("../Model/UserModel");
 
 const BusinessPostView = async (req, res) => {
   try {
@@ -8,6 +9,10 @@ const BusinessPostView = async (req, res) => {
       ...req.body,
     });
     await business.save();
+    const user = await UserModel.findById(req.id);
+    user.business.push(business._id);
+    await user.save();
+
     res
       .status(200)
       .send({ message: "Business added Successfully", post: business });
@@ -46,13 +51,13 @@ const BusinessGetUserView = async (req, res) => {
     const data = await BusinessModel.find({
       user: new mongoose.Types.ObjectId(req.id),
     })
-    .populate("user")
-    .populate("reactions")
-    .populate("comments")
-    .sort("-date")
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec();
+      .populate("user")
+      .populate("reactions")
+      .populate("comments")
+      .sort("-date")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
 
     const count = await BusinessModel.find({
       user: new mongoose.Types.ObjectId(req.id),
@@ -71,7 +76,7 @@ const BusinessGetPublicView = async (req, res) => {
     const data = await BusinessModel.find({
       user: new mongoose.Types.ObjectId(req.params.id),
     })
-       .populate("user")
+      .populate("user")
       .populate("reactions")
       .populate("comments")
       .sort("-date")
@@ -96,13 +101,13 @@ const BusinessGetCategoryView = async (req, res) => {
     const name = req.params.name;
 
     const data = await BusinessModel.find({ serviceType: { $all: [name] } })
-    .populate("user")
-    .populate("reactions")
-    .populate("comments")
-    .sort("-date")
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec();
+      .populate("user")
+      .populate("reactions")
+      .populate("comments")
+      .sort("-date")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
 
     const count = await BusinessModel.find({
       serviceType: { $all: [name] },
@@ -125,11 +130,10 @@ const SingleBusinessView = async (req, res) => {
     const gig = await BusinessModel.find({
       _id: new mongoose.Types.ObjectId(id),
     })
-    
-    .populate("user")
-    .populate("reactions")
-    .populate("comments")
-    
+
+      .populate("user")
+      .populate("reactions")
+      .populate("comments");
 
     res.status(200).send({
       message: "Business find Successfully Done",

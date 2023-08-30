@@ -151,7 +151,7 @@ const getUserProfileView = async (req, res, next) => {
   try {
     const profile = await UserModel.find({
       _id: new mongoose.Types.ObjectId(req.id),
-    });
+    }).populate("gigs")?.populate("ads")?.populate("business")?.populate("jobs")?.populate("reviewReciver")?.populate('reviewUser')
 
     res.status(200).send({
       data: profile[0],
@@ -224,6 +224,8 @@ const LoginUserView = async (req, res, next) => {
     return res.status(201).send(error);
   }
 };
+
+
 
 const sendPassword = async (req, res, next) => {
   try {

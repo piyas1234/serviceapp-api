@@ -22,48 +22,58 @@ const JobsSchema = Schema(
       required: true,
       required: [true, "images is Required"],
     },
-    adress:{
-        type: String,
-        required: [true, "Adress is Required"],
+    adress: {
+      type: String,
+      required: [true, "Adress is Required"],
     },
 
-    slarayRange:{
-        type:String
+    slarayRange: {
+      type: String,
     },
+
+    salaryFrom: {
+      type: String,
+    },
+
+    salaryTo: {
+      type: String,
+    },
+
     contactNo: {
-        type: Array,
-      },
-      businessEmail: {
-        type: Array,
-      },
+      type: Array,
+    },
+    businessEmail: {
+      type: Array,
+    },
 
-      serviceType: {
-        type: Array,
-        required: true,
-        required: [true, "Service type is Required"],
-      },
+    serviceType: {
+      type: Array,
+      required: true,
+      required: [true, "Service type is Required"],
+    },
 
     keyworlds: {
       type: Array,
       required: true,
       required: [true, "keyworlds is Required"],
     },
-    templateColor:{
-      type: String,
-  },
-  butonText:{
-      type: String,
-  },
-  butonLink:{
-      type: String,
-  },
-  reactions: [{ type: Schema.Types.ObjectId, ref: "Reaction" }],
 
-  comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
-  type:{
-    type:String,
-    default:'jobs'
-   },
+    templateColor: {
+      type: String,
+    },
+    butonText: {
+      type: String,
+    },
+    butonLink: {
+      type: String,
+    },
+    reactions: [{ type: Schema.Types.ObjectId, ref: "Reaction" }],
+
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
+    type: {
+      type: String,
+      default: "jobs",
+    },
 
     date: { type: Date, default: Date.now },
   },

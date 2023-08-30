@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose")
 const GigsModel = require("../Model/GigsModel")
+const UserModel = require("../Model/UserModel")
 
 const GigsPostView = async (req, res) => {
   
@@ -26,7 +27,10 @@ const GigsPostView = async (req, res) => {
       keyworlds,
     })
     await newGigs.save()
-    res.status(200).send({ message: "Gigs added Successfully" })
+    const user = await UserModel.findById(req.id);
+    user.gigs.push(newGigs._id);
+    await user.save();
+    res.status(200).send({ message: "Gigs added Successfully" , gig:newGigs  })
   } catch (error) {
     
     res.status(201).send({

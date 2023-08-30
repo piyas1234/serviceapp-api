@@ -1,16 +1,24 @@
 const { default: mongoose } = require("mongoose");
 const JobsModel = require("../Model/JobsModel");
+const UserModel = require("../Model/UserModel");
 
 const JobsPostView = async (req, res) => {
   try {
-    const business = await JobsModel({
+    const jobs = await JobsModel({
       user: new mongoose.Types.ObjectId(req.id),
       ...req.body,
     });
-    await business.save();
+    await jobs.save();
+    const user = await UserModel.findById(req.id);
+
+    user.jobs.push(jobs._id);
+    await user.save();
+
+
+
     res
       .status(200)
-      .send({ message: "Jobs added Successfully", post: business });
+      .send({ message: "Jobs added Successfully", post: jobs });
   } catch (error) {
     res.status(201).send({
       message: "error",
@@ -95,7 +103,9 @@ const JobsGetView = async (req, res) => {
 const JobsGetUserView = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   try {
-    const data = await JobsModel.find({})
+    const data = await JobsModel.find({
+      user: new mongoose.Types.ObjectId(req.id),
+    })
     .populate("reactions")
     .populate("comments")
     .populate("user")

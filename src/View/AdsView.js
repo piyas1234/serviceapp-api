@@ -1,14 +1,19 @@
 const { default: mongoose } = require("mongoose");
 const AdsModel = require("../Model/AdsModel");
+const UserModel = require("../Model/UserModel");
 
 const AdsPostView = async (req, res) => {
   try {
-    const business = await AdsModel({
+    const ads = await AdsModel({
       user:  new mongoose.Types.ObjectId(req.id),
       ...req.body,
     });
-    await business.save();
-    res.status(200).send({ message: "Ads added Successfully", post: business });
+    await ads.save();
+    const user = await UserModel.findById(req.id);
+
+    user.ads.push(ads._id);
+    await user.save();
+    res.status(200).send({ message: "Ads added Successfully", post: ads });
   } catch (error) {
     res.status(201).send({
       message: "error",
@@ -40,9 +45,9 @@ const AdsGetView = async (req, res) => {
 };
 
 const AdsGetUserView = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20 } = req?.query;
   try {
-    const data = await AdsModel.find({ user: mongoose.Types.ObjectId(req.id) })
+    const data = await AdsModel.find({ user: new  mongoose.Types.ObjectId(req.id) })
     .populate("user")
     .populate("reactions")
     .populate("comments")
@@ -53,12 +58,18 @@ const AdsGetUserView = async (req, res) => {
     const count = await AdsModel.find({
       user: new mongoose.Types.ObjectId(req.id),
     }).countDocuments();
+
+
+    console.log(count)
     res.status(200).send({
       gigs: data,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error)
+  }
 };
 
 const AdsGetPublicView = async (req, res) => {

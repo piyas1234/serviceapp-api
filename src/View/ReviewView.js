@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const reviewModel = require("../Model/ReviewModel");
+const UserModel = require("../Model/UserModel");
 
 const ReviewrPostView = async (req, res) => {
   const { description, star, reviewGig, reviewReciver } = req.body;
@@ -11,7 +12,11 @@ const ReviewrPostView = async (req, res) => {
       reviewReciver: new mongoose.Types.ObjectId(reviewReciver),
       reviewUser: new mongoose.Types.ObjectId(req.id)
     });
+
     await newReview.save();
+    const user = await UserModel.findById(reviewReciver);
+    user.reviews.push(newReview._id);
+    await user.save();
     res.status(200).send({ message: "Review added Successfully", newReview });
   } catch (error) {}
 };
